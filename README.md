@@ -1,9 +1,3 @@
-# mlm_mobile_app
-
-Here’s the updated README file with the company-specific license and additional build instructions for the iOS platform:
-
----
-
 # Flutter Project
 
 A comprehensive Flutter application with a robust structure, including user authentication, data management, and a variety of features.
@@ -62,7 +56,7 @@ The project is organized into several key folders:
    git clone https://github.com/AbdallahRahams/mlm_mobile_app.git
    ```
 
-2. **Navigate to the Project Directory**
+2. **Navigate to the Project Directory (If you are not in the root directory)**
 
    ```bash
    cd mlm_mobile_app
