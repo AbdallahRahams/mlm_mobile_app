@@ -19,12 +19,24 @@ This Flutter project is designed to provide a rich user experience with features
 
 ## Features
 
-- **User Authentication**: Sign in, sign up, and password recovery.
-- **Product Management**: View, add, and manage products.
-- **Order Management**: Track and manage orders.
-- **Analytics Dashboard**: View and analyze key metrics.
-- **Customizable Themes**: Various themes and font options.
-- **Responsive Design**: Works on different screen sizes and devices.
+### Core MLM Features
+
+- **User Management**: Sign up, sign in, and manage user accounts with role-based access and referral tracking.
+- **Referral System**: Track and manage user referrals, including referral bonuses and hierarchies.
+- **Earnings Management**: View and manage earnings from different sources and calculate commissions.
+- **Order Management**: Process, track, and manage orders efficiently.
+- **Product Management**: Add, update, and manage products with details and variants.
+- **Wholesaler Management**: Manage wholesaler accounts and verify their details.
+
+### Analytics and Reporting
+
+- **Analytics Dashboard**: Analyze key metrics such as user growth, referral success, and sales performance.
+- **Custom Reports**: Generate and view detailed reports on earnings, orders, and referrals.
+
+### User Experience
+
+- **Customizable Themes**: Various themes and font options to match brand aesthetics.
+- **Responsive Design**: Optimized for different screen sizes and devices to ensure a seamless user experience.
 
 ## Project Structure
 
