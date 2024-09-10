@@ -155,7 +155,3 @@ Contributions are welcome! To contribute:
 © 2024 African Digital Marketing Agency. All rights reserved.
 
 This project is proprietary and for the exclusive use of African Digital Marketing Agency. Unauthorized use, distribution, or duplication of this software is prohibited.
-
----
-
-Feel free to adjust any details or add additional sections as needed!
