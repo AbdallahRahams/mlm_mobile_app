@@ -11,6 +11,7 @@ import '../presentation/bloc/analytics/analytics_bloc.dart';
 import '../presentation/bloc/wholesaler/wholesaler_bloc.dart';
 import 'routes.dart';
 
+
 void main() {
   runApp(MyApp());
 }
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter E-Commerce App',
+        title: 'Network Marketing App',
         initialRoute: '/signin',
         onGenerateRoute: Routes.generateRoute,
       ),

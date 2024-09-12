@@ -1,24 +1,40 @@
-import 'package:your_project/data/datasources/local/local_data_source.dart';
-import 'package:your_project/data/datasources/remote/remote_data_source.dart';
-import 'package:your_project/domain/entities/analytics.dart';
-import 'package:your_project/domain/repositories/analytics_repository.dart';
+import 'package:mlm_mobile_app/domain/entities/product.dart';
+import 'package:mlm_mobile_app/domain/repositories/product_repository.dart';
+import '../datasources/local/local_data_source.dart';
+import '../datasources/remote/remote_data_source.dart';
 
-class AnalyticsRepositoryImpl implements AnalyticsRepository {
+class ProductRepositoryImpl implements ProductRepository {
   final LocalDataSource localDataSource;
   final RemoteDataSource remoteDataSource;
 
-  AnalyticsRepositoryImpl({
+  ProductRepositoryImpl({
     required this.localDataSource,
     required this.remoteDataSource,
   });
 
   @override
-  Future<Analytics> getAnalyticsData(String analyticsId) async {
-    try {
-      final analytics = await remoteDataSource.getAnalyticsData(analyticsId);
-      return analytics;
-    } catch (e) {
-      return localDataSource.getAnalyticsData(analyticsId);
-    }
+  Future<void> addProduct(Product product) {
+    // TODO: implement addProduct
+    throw UnimplementedError();
   }
+
+  @override
+  Future<void> deleteProduct(String productId) {
+    // TODO: implement deleteProduct
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Product> getProductDetails(String productId) {
+    // TODO: implement getProductDetails
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Product>> getProducts() {
+    // TODO: implement getProducts
+    throw UnimplementedError();
+  }
+
+  // Implement the required methods from ProductRepository
 }

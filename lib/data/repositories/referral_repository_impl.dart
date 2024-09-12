@@ -1,7 +1,7 @@
-import 'package:your_project/data/datasources/local/local_data_source.dart';
-import 'package:your_project/data/datasources/remote/remote_data_source.dart';
-import 'package:your_project/domain/entities/referral.dart';
-import 'package:your_project/domain/repositories/referral_repository.dart';
+import 'package:mlm_mobile_app/domain/entities/referral.dart';
+import '../../domain/repositories/referral_repository.dart';
+import '../datasources/local/local_data_source.dart';
+import '../datasources/remote/remote_data_source.dart';
 
 class ReferralRepositoryImpl implements ReferralRepository {
   final LocalDataSource localDataSource;
@@ -13,12 +13,20 @@ class ReferralRepositoryImpl implements ReferralRepository {
   });
 
   @override
-  Future<Referral> getReferralCount(String userId) async {
-    try {
-      final referral = await remoteDataSource.getReferralCount(userId);
-      return referral;
-    } catch (e) {
-      return localDataSource.getReferralCount(userId);
-    }
+  Future<void> addReferral(String referrerId, String referralCode) {
+    // TODO: implement addReferral
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Referral> getReferralData(String userId) {
+    // TODO: implement getReferralData
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Referral>> getTopReferrers() {
+    // TODO: implement getTopReferrers
+    throw UnimplementedError();
   }
 }

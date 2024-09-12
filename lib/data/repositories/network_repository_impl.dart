@@ -1,7 +1,7 @@
-import 'package:your_project/data/datasources/local/local_data_source.dart';
-import 'package:your_project/data/datasources/remote/remote_data_source.dart';
-import 'package:your_project/domain/entities/network.dart';
-import 'package:your_project/domain/repositories/network_repository.dart';
+import '../../domain/entities/network.dart';
+import '../../domain/repositories/network_repository.dart';
+import '../datasources/local/local_data_source.dart';
+import '../datasources/remote/remote_data_source.dart';
 
 class NetworkRepositoryImpl implements NetworkRepository {
   final LocalDataSource localDataSource;
@@ -11,14 +11,28 @@ class NetworkRepositoryImpl implements NetworkRepository {
     required this.localDataSource,
     required this.remoteDataSource,
   });
-
+  
   @override
-  Future<Network> getNetworkDetails(String networkId) async {
-    try {
-      final network = await remoteDataSource.getNetworkDetails(networkId);
-      return network;
-    } catch (e) {
-      return localDataSource.getNetworkDetails(networkId);
-    }
+  Future<void> createNetwork(Network network) {
+    // TODO: implement createNetwork
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> deleteNetwork(String networkId) {
+    // TODO: implement deleteNetwork
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Network>> getAllNetworks() {
+    // TODO: implement getAllNetworks
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Network> getNetworkDetails(String networkId) {
+    // TODO: implement getNetworkDetails
+    throw UnimplementedError();
   }
 }

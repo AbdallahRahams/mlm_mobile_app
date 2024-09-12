@@ -25,11 +25,9 @@ export 'bloc/analytics/analytics_state.dart';
 export 'bloc/wholesaler/wholesaler_bloc.dart';
 export 'bloc/wholesaler/wholesaler_event.dart';
 export 'bloc/wholesaler/wholesaler_state.dart';
-
 export 'pages/auth/signin_page.dart';
 export 'pages/auth/signup_page.dart';
 export 'pages/auth/forgot_password_page.dart';
-export 'pages/dashboard/admin_dashboard.dart';
 export 'pages/dashboard/retailer_dashboard.dart';
 export 'pages/dashboard/analytics_dashboard.dart';
 export 'pages/network/network_page.dart';

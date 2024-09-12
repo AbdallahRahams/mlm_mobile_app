@@ -1,7 +1,9 @@
-import 'package:your_project/data/datasources/local/local_data_source.dart';
-import 'package:your_project/data/datasources/remote/remote_data_source.dart';
-import 'package:your_project/domain/entities/earnings.dart';
-import 'package:your_project/domain/repositories/earnings_repository.dart';
+import 'package:mlm_mobile_app/data/models/earnings_model.dart';
+
+import '../../domain/entities/earnings.dart';
+import '../../domain/repositories/earnings_repository.dart';
+import '../datasources/local/local_data_source.dart';
+import '../datasources/remote/remote_data_source.dart';
 
 class EarningsRepositoryImpl implements EarningsRepository {
   final LocalDataSource localDataSource;
@@ -13,12 +15,20 @@ class EarningsRepositoryImpl implements EarningsRepository {
   });
 
   @override
-  Future<Earnings> getEarnings(String userId) async {
-    try {
-      final earnings = await remoteDataSource.getEarnings(userId);
-      return earnings;
-    } catch (e) {
-      return localDataSource.getEarnings(userId);
-    }
+  Future<void> updateEarnings(Earnings earnings) {
+    // TODO: implement updateEarnings
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> withdrawEarnings(String userId, double amount) {
+    // TODO: implement withdrawEarnings
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Earnings> getEarnings(String userId) {
+    // TODO: implement getEarnings
+    throw UnimplementedError();
   }
 }

@@ -1,8 +1,8 @@
-export 'user_repository_impl.dart';
-export 'network_repository_impl.dart';
-export 'earnings_repository_impl.dart';
-export 'referral_repository_impl.dart';
-export 'order_repository_impl.dart';
-export 'product_repository_impl.dart';
-export 'analytics_repository_impl.dart';
-export 'wholesaler_repository_impl.dart';
+export 'repositories/user_repository_impl.dart';
+export 'repositories/network_repository_impl.dart';
+export 'repositories/earnings_repository_impl.dart';
+export 'repositories/referral_repository_impl.dart';
+export 'repositories/order_repository_impl.dart';
+export 'repositories/product_repository_impl.dart';
+export 'repositories/analytics_repository_impl.dart';
+export 'repositories/wholesaler_repository_impl.dart';

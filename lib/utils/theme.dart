@@ -5,18 +5,18 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       primarySwatch: Colors.blue,
-      accentColor: Colors.orange,
-      buttonTheme: ButtonThemeData(
+      hintColor: Colors.orange,
+      buttonTheme: const ButtonThemeData(
         buttonColor: Colors.blue,
         textTheme: ButtonTextTheme.primary,
       ),
-      textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
-        headline2: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(fontSize: 16.0),
-        bodyText2: TextStyle(fontSize: 14.0),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+        headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        bodyLarge: TextStyle(fontSize: 16.0),
+        bodyMedium: TextStyle(fontSize: 14.0),
       ),
-      inputDecorationTheme: InputDecorationTheme(
+      inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
         labelStyle: TextStyle(color: Colors.blue),
       ),
@@ -27,18 +27,18 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       primarySwatch: Colors.blue,
-      accentColor: Colors.orange,
-      buttonTheme: ButtonThemeData(
+      hintColor: Colors.orange,
+      buttonTheme: const ButtonThemeData(
         buttonColor: Colors.blue,
         textTheme: ButtonTextTheme.primary,
       ),
-      textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
-        headline2: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(fontSize: 16.0),
-        bodyText2: TextStyle(fontSize: 14.0),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+        headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        bodyLarge: TextStyle(fontSize: 16.0),
+        bodyMedium: TextStyle(fontSize: 14.0),
       ),
-      inputDecorationTheme: InputDecorationTheme(
+      inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
         labelStyle: TextStyle(color: Colors.blue),
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../presentation/pages/auth/signin_page.dart';
 import '../presentation/pages/auth/signup_page.dart';
 import '../presentation/pages/auth/forgot_password_page.dart';
-import '../presentation/pages/dashboard/admin_dashboard.dart';
 import '../presentation/pages/dashboard/retailer_dashboard.dart';
 import '../presentation/pages/dashboard/analytics_dashboard.dart';
 import '../presentation/pages/network/network_page.dart';
@@ -32,8 +31,6 @@ class Routes {
         return MaterialPageRoute(builder: (_) => SignUpPage());
       case '/forgot-password':
         return MaterialPageRoute(builder: (_) => ForgotPasswordPage());
-      case '/admin-dashboard':
-        return MaterialPageRoute(builder: (_) => AdminDashboard());
       case '/retailer-dashboard':
         return MaterialPageRoute(builder: (_) => RetailerDashboard());
       case '/analytics-dashboard':

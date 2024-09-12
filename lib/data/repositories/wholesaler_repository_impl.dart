@@ -1,7 +1,10 @@
-import 'package:your_project/data/datasources/local/local_data_source.dart';
-import 'package:your_project/data/datasources/remote/remote_data_source.dart';
-import 'package:your_project/domain/entities/wholesaler.dart';
-import 'package:your_project/domain/repositories/wholesaler_repository.dart';
+
+
+import 'package:mlm_mobile_app/domain/entities/wholesaler.dart';
+
+import '../../domain/repositories/wholesaler_repository.dart';
+import '../datasources/local/local_data_source.dart';
+import '../datasources/remote/remote_data_source.dart';
 
 class WholesalerRepositoryImpl implements WholesalerRepository {
   final LocalDataSource localDataSource;
@@ -13,18 +16,26 @@ class WholesalerRepositoryImpl implements WholesalerRepository {
   });
 
   @override
-  Future<Wholesaler> getWholesalerDetails(String wholesalerId) async {
-    try {
-      final wholesaler = await remoteDataSource.getWholesalerDetails(wholesalerId);
-      return wholesaler;
-    } catch (e) {
-      return localDataSource.getWholesalerDetails(wholesalerId);
-    }
+  Future<List<Wholesaler>> getWholesalers() {
+    // TODO: implement getWholesalers
+    throw UnimplementedError();
   }
 
   @override
-  Future<void> verifyWholesaler(String wholesalerId) async {
-    await remoteDataSource.verifyWholesaler(wholesalerId);
-    localDataSource.updateWholesalerStatus(wholesalerId, 'verified');
+  Future<void> removeWholesaler(String wholesalerId) {
+    // TODO: implement removeWholesaler
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Wholesaler> getWholesalerDetails(String wholesalerId) {
+    // TODO: implement getWholesalerDetails
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> verifyWholesaler(String wholesalerId) {
+    // TODO: implement verifyWholesaler
+    throw UnimplementedError();
   }
 }
