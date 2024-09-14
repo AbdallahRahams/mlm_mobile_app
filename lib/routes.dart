@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mlm_mobile_app/presentation/bloc/home/home_state.dart';
+import 'package:mlm_mobile_app/presentation/pages/invite/invite_page.dart';
+import 'package:mlm_mobile_app/presentation/pages/paymentInfo/payment_info_page.dart';
+import 'package:mlm_mobile_app/presentation/pages/profile/profile_page.dart';
+import 'package:mlm_mobile_app/presentation/pages/tasks/tasks_page.dart';
+import 'package:mlm_mobile_app/presentation/pages/wallet/my_wallet_page.dart';
 import '../presentation/pages/auth/signin_page.dart';
 import '../presentation/pages/auth/signup_page.dart';
 import '../presentation/pages/auth/forgot_password_page.dart';
@@ -21,6 +27,9 @@ import '../presentation/pages/settings/settings_page.dart';
 import '../presentation/pages/settings/change_password_page.dart';
 import '../presentation/pages/settings/contact_details_page.dart';
 import '../presentation/pages/settings/product_services_page.dart';
+import '../presentation/pages/auth/phone_verification.dart';
+import 'presentation/pages/home/homePage.dart';
+import 'presentation/pages/notifications/NotificationsPage.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -67,8 +76,25 @@ class Routes {
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());
       case '/contact-details':
         return MaterialPageRoute(builder: (_) => ContactDetailsPage());
+      case '/phone-verification':
+        final phoneNumber = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) => PhoneVerificationPage(phoneNumber: phoneNumber));
       case '/product-services':
         return MaterialPageRoute(builder: (_) => ProductServicesPage());
+      case '/home':
+        return MaterialPageRoute(builder: (_) => HomePage());
+      case '/notifications':
+        return MaterialPageRoute(builder: (_) => const NotificationPage());
+      case '/profile':
+        return MaterialPageRoute(builder: (_) => ProfilePage());
+      case '/payment-info':
+        return MaterialPageRoute(builder: (_) => PaymentInfoPage());
+      case '/my-wallet':
+        return MaterialPageRoute(builder: (_) => MyWalletPage());
+      case '/invite':
+        return MaterialPageRoute(builder: (_) => InvitePage());
+      case '/tasks':
+        return MaterialPageRoute(builder: (_) => TasksPage());
       default:
         return MaterialPageRoute(builder: (_) => SignInPage()); // Default route
     }

@@ -7,9 +7,8 @@ import 'package:mlm_mobile_app/domain/repositories/user_repository.dart';
 import 'package:mlm_mobile_app/domain/repositories/network_repository.dart';
 import 'package:mlm_mobile_app/domain/usecases/get_user_info.dart';
 import 'package:mlm_mobile_app/domain/usecases/get_network_details.dart';
-import 'package:mlm_mobile_app/presentation/bloc/auth/auth_bloc.dart';
-import 'package:mlm_mobile_app/presentation/bloc/user/user_bloc.dart';
 import 'package:mlm_mobile_app/presentation/presentation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data/repositories/analytics_repository_impl.dart';
 import 'data/repositories/earnings_repository_impl.dart';
 import 'data/repositories/order_repository_impl.dart';
@@ -89,7 +88,5 @@ Future<void> init() async {
 ));
 
 
-  // Other services, like shared preferences, network info, etc.
-  // Example:
-  // sl.registerLazySingleton(() => SharedPreferences.getInstance());
+  sl.registerLazySingleton(() => SharedPreferences.getInstance());
 }

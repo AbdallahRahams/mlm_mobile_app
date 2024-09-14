@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Network Marketing App',
-        initialRoute: '/signin',
+        initialRoute: '/home',
         onGenerateRoute: Routes.generateRoute,
       ),
     );
