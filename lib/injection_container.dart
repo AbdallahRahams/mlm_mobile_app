@@ -7,6 +7,8 @@ import 'package:mlm_mobile_app/domain/repositories/user_repository.dart';
 import 'package:mlm_mobile_app/domain/repositories/network_repository.dart';
 import 'package:mlm_mobile_app/domain/usecases/get_user_info.dart';
 import 'package:mlm_mobile_app/domain/usecases/get_network_details.dart';
+import 'package:mlm_mobile_app/presentation/bloc/rank/rank_bloc.dart';
+import 'package:mlm_mobile_app/presentation/bloc/services/services_bloc.dart';
 import 'package:mlm_mobile_app/presentation/presentation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'data/repositories/analytics_repository_impl.dart';
@@ -28,12 +30,15 @@ import 'domain/usecases/get_top_referrers.dart';
 import 'domain/usecases/manage_orders.dart';
 import 'domain/usecases/manage_products.dart';
 import 'domain/usecases/manage_wholesalers.dart';
+import 'presentation/bloc/payment/payment_bloc.dart';
+import 'presentation/bloc/task/task_bloc.dart';
 
 final sl = GetIt.instance; // sl = service locator
 
 Future<void> init() async {
   // Bloc
   sl.registerFactory(() => AuthBloc());
+  sl.registerFactory(() => TaskBloc());
   sl.registerFactory(() => UserBloc());
   sl.registerFactory(() => NetworkBloc());
   sl.registerFactory(() => EarningsBloc());
@@ -42,6 +47,7 @@ Future<void> init() async {
   sl.registerFactory(() => ProductBloc());
   sl.registerFactory(() => AnalyticsBloc());
   sl.registerFactory(() => WholesalerBloc());
+  sl.registerFactory(() => PaymentBloc());
 
   // Use cases
   sl.registerLazySingleton(() => GetUserInfo(sl()));
@@ -54,39 +60,37 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetTopReferrers(sl()));
   sl.registerLazySingleton(() => ManageWholesalers(sl()));
 
-
   // Repositories
-  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<NetworkRepository>(() => NetworkRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<NetworkRepository>(() =>
+      NetworkRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<EarningsRepository>(() => EarningsRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<EarningsRepository>(() =>
+      EarningsRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<ReferralRepository>(() => ReferralRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<ReferralRepository>(() =>
+      ReferralRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<OrderRepository>(
+      () => OrderRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<ProductRepository>(() =>
+      ProductRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<AnalyticsRepository>(() => AnalyticsRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<AnalyticsRepository>(() =>
+      AnalyticsRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
-  sl.registerLazySingleton<WholesalerRepository>(() => WholesalerRepositoryImpl(
-    localDataSource: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<WholesalerRepository>(() =>
+      WholesalerRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()));
 
   // Data sources
   sl.registerLazySingleton<LocalDataSource>(() => LocalDataSource());
 
   sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSource(
-  'https://your-api-base-url.com',
-));
-
+        'https://your-api-base-url.com',
+      ));
 
   sl.registerLazySingleton(() => SharedPreferences.getInstance());
 }

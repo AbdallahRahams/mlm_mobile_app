@@ -53,6 +53,13 @@ class AppTextStyles {
     fontFamily: 'open-sans',
   );
 
+  static const TextStyle appBartext = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.secondary,
+    fontFamily: 'open-sans',
+  );
+
   // Body Text
   static const TextStyle bodyText1 = TextStyle(
     fontSize: 16,

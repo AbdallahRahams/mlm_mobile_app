@@ -1,93 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../app_colors.dart'; // Make sure this is the correct path
-import '../../../text_styles.dart'; // Make sure this is the correct path
+import 'package:iconsax/iconsax.dart'; // Import Iconsax
+
+import '../../../app_colors.dart'; // Ensure correct path
+import '../../../text_styles.dart'; // Ensure correct path
 
 class InvitePage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
 
   InvitePage() {
-    _emailController.text = '';  // Default value for email, if any
-    _messageController.text = 'Hi! I\'m using this amazing app, and I\'d love for you to try it out! Download it here: [link] and use my referral code: [referral code] when you sign up!';
+    _emailController.text = '';  // Default email value
+    _messageController.text =
+        'Hi! I\'m using this amazing app, and I\'d love for you to try it out! Download it here: [link] and use my referral code: [referral code] when you sign up!';
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.primary, // Use your theme color
-        title: Text('Invite', style: AppTextStyles.heading1.copyWith(color: Colors.white)),
-        centerTitle: true,
+        backgroundColor: AppColors.primary,
+        title: Text('Invite', style: AppTextStyles.appBartext),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: AppColors.secondary), // Using Iconsax
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: screenHeight * 0.02,
+            horizontal: screenWidth * 0.05,
             vertical: screenHeight * 0.03,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Send an Invite',
+                'Invite Friends',
                 style: AppTextStyles.heading1.copyWith(
                   color: AppColors.primary,
-                  fontSize: screenHeight * 0.025,
+                  fontSize: screenHeight * 0.03,
                 ),
               ),
-              SizedBox(height: screenHeight * 0.02),
-
+              SizedBox(height: screenHeight * 0.03),
+              
+              // Invite Options (Using Flexible Grid)
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildInviteOption(
                     context,
-                    icon: Icons.email,
+                    icon: Iconsax.sms, // Using Iconsax
                     label: 'Email',
                     onTap: () => showInviteBottomSheet(context),
                   ),
                   _buildInviteOption(
                     context,
-                    icon: Icons.phone,
+                    icon: Iconsax.call, // Using Iconsax
                     label: 'Mobile Phone',
                     onTap: () => _showPhoneNumberPrompt(context),
                   ),
                 ],
               ),
+              SizedBox(height: screenHeight * 0.05),
 
-              SizedBox(height: screenHeight * 0.03),
-
+              // Sent Invitations Heading
               Text(
                 'Sent Invitations',
-                style: AppTextStyles.heading1.copyWith(
+                style: AppTextStyles.heading2.copyWith(
                   color: AppColors.primary,
-                  fontSize: screenHeight * 0.02,
+                  fontSize: screenHeight * 0.025,
                 ),
               ),
-              SizedBox(height: screenHeight * 0.01),
-
+              SizedBox(height: screenHeight * 0.02),
+              
+              // List of Sent Invitations (Taking up remaining screen space)
               Expanded(
-                child: ListView(
-                  children: [
-                    _buildSentInviteTile(
-                      identifier: 'example1@example.com',
-                      status: 'Pending',
-                      date: '2024-09-12',
-                    ),
-                    _buildSentInviteTile(
-                      identifier: '+255234567890',
-                      status: 'Accepted',
-                      date: '2024-09-10',
-                    ),
-                  ],
-                ),
+                child: _buildSentInvitesList(),
               ),
             ],
           ),
@@ -96,20 +88,72 @@ class InvitePage extends StatelessWidget {
     );
   }
 
+  // Invite Options using buttons
   Widget _buildInviteOption(BuildContext context, {required IconData icon, required String label, required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: AppColors.primary.withOpacity(0.2),
+              child: Icon(icon, size: 35, color: AppColors.primary),
+            ),
+            SizedBox(height: 10),
+            Text(label, style: AppTextStyles.bodyText1.copyWith(color: AppColors.text)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // List of sent invitations
+  Widget _buildSentInvitesList() {
+    return ListView(
+      children: [
+        _buildSentInviteTile(
+          identifier: 'example1@example.com',
+          status: 'Pending',
+          date: '2024-09-12',
+        ),
+        _buildSentInviteTile(
+          identifier: '+255234567890',
+          status: 'Accepted',
+          date: '2024-09-10',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSentInviteTile({required String identifier, required String status, required String date}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
         children: [
-          Icon(icon, size: 40, color: AppColors.primary),
-          SizedBox(height: 10),
-          Text(label, style: AppTextStyles.bodyText1.copyWith(color: Colors.black)),
+          Icon(
+            identifier.contains('@') ? Iconsax.sms : Iconsax.call, // Iconsax here
+            color: AppColors.primary,
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(identifier, style: AppTextStyles.bodyText1),
+                Text('Status: $status', style: AppTextStyles.bodyText2.copyWith(color: Colors.grey)),
+              ],
+            ),
+          ),
+          Text(date, style: AppTextStyles.bodyText2.copyWith(color: Colors.grey)),
         ],
       ),
     );
   }
 
+  // Bottom sheet for email invite
   void showInviteBottomSheet(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -117,7 +161,6 @@ class InvitePage extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
-        final screenHeight = MediaQuery.of(context).size.height;
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -131,9 +174,7 @@ class InvitePage extends StatelessWidget {
             children: [
               Text(
                 'Send Invite via Email',
-                style: AppTextStyles.heading1.copyWith(
-                  fontSize: screenHeight * 0.025,
-                ),
+                style: AppTextStyles.heading1.copyWith(fontSize: screenHeight * 0.025),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: screenHeight * 0.02),
@@ -141,46 +182,18 @@ class InvitePage extends StatelessWidget {
                 context: context,
                 controller: _emailController,
                 labelText: 'Email Address',
-                icon: Icons.email,
+                icon: Iconsax.sms, // Iconsax
               ),
               SizedBox(height: screenHeight * 0.015),
               _buildTextField(
                 context: context,
                 controller: _messageController,
                 labelText: 'Message (Optional)',
-                icon: Icons.message,
+                icon: Iconsax.message, // Iconsax
                 maxLines: 3,
               ),
               SizedBox(height: screenHeight * 0.02),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                      ),
-                      child: Text('Cancel', style: AppTextStyles.button.copyWith(fontSize: screenHeight * 0.02)),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Implement send email logic here
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondary, // Use your theme color
-                        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                      ),
-                      child: Text('Send Invite', style: AppTextStyles.button.copyWith(fontSize: screenHeight * 0.02)),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: screenHeight * 0.02),
+              _buildButtonRow(context),
             ],
           ),
         );
@@ -188,22 +201,43 @@ class InvitePage extends StatelessWidget {
     );
   }
 
+  // Reusable Text Field widget
+  Widget _buildTextField({
+    required BuildContext context,
+    required TextEditingController controller,
+    required String labelText,
+    required IconData icon,
+    int maxLines = 1,
+    ValueChanged<String>? onChanged,
+  }) {
+    return TextField(
+      controller: controller,
+      maxLines: maxLines,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
+  // Phone number prompt dialog
   void _showPhoneNumberPrompt(BuildContext context) {
     String phoneNumber = '';
-
     showDialog(
       context: context,
       builder: (_) {
         final screenHeight = MediaQuery.of(context).size.height;
         return AlertDialog(
-          title: Text('Enter Phone Number', style: AppTextStyles.heading1.copyWith(fontSize: screenHeight * 0.025)),
+          title: Text('Enter Phone Number', style: AppTextStyles.heading2.copyWith(fontSize: screenHeight * 0.025)),
           content: Container(
             width: MediaQuery.of(context).size.width * 0.9,
             child: _buildTextField(
               context: context,
               controller: TextEditingController(),
               labelText: 'Phone Number',
-              icon: Icons.phone,
+              icon: Iconsax.call, // Iconsax
               onChanged: (value) {
                 phoneNumber = value;
               },
@@ -212,19 +246,17 @@ class InvitePage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              style: TextButton.styleFrom(backgroundColor: AppColors.primary),
-              child: Text('Cancel', style: AppTextStyles.button.copyWith(fontSize: screenHeight * 0.02)),
+              child: Text('Cancel', style: AppTextStyles.button.copyWith(color: AppColors.primary)),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary, // Button color
+              ),
               onPressed: () {
                 _sendSMSInvite(phoneNumber);
                 Navigator.pop(context);
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.secondary, // Use your theme color
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-              child: Text('Send Invite', style: AppTextStyles.button.copyWith(fontSize: screenHeight * 0.02)),
+              child: Text('Send Invite', style: AppTextStyles.button.copyWith(color: Colors.white)),
             ),
           ],
         );
@@ -232,67 +264,37 @@ class InvitePage extends StatelessWidget {
     );
   }
 
-  void _sendSMSInvite(String phoneNumber) async {
-    final Uri smsUri = Uri(
-      scheme: 'sms',
-      path: phoneNumber,
-      queryParameters: <String, String>{
-        'body': 'Hi, check out this amazing app! Use my referral link: [link]',
-      },
-    );
-
-    if (await canLaunchUrl(smsUri)) {
-      await launchUrl(smsUri);
-    } else {
-      print('Could not launch SMS');
-    }
+  // Function to send SMS Invite
+  void _sendSMSInvite(String phoneNumber) {
+    // Logic to send SMS invite
+    print('Sending SMS invite to $phoneNumber');
   }
 
-  Widget _buildSentInviteTile({
-    required String identifier,
-    required String status,
-    required String date,
-  }) {
-    return ListTile(
-      leading: Icon(
-        identifier.contains('@') ? Icons.email : Icons.phone,
-        color: AppColors.primary,
-      ),
-      title: Text(identifier, style: AppTextStyles.bodyText1.copyWith(color: Colors.black)),
-      subtitle: Text('Status: $status', style: AppTextStyles.bodyText1.copyWith(color: Colors.grey)),
-      trailing: Text(date, style: AppTextStyles.bodyText1.copyWith(color: Colors.grey)),
-    );
-  }
-
-  Widget _buildTextField({
-    required BuildContext context,
-    required TextEditingController controller,
-    required String labelText,
-    required IconData icon,
-    void Function(String)? onChanged,
-    int maxLines = 1,
-  }) {
+  // Button row in bottom sheet
+  Widget _buildButtonRow(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    return TextField(
-      controller: controller,
-      onChanged: onChanged,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.primary),
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: AppColors.primary),
+    return Row(
+      children: [
+        Expanded(
+          child: TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: AppTextStyles.button.copyWith(color: AppColors.primary)),
+          ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: AppColors.primary),
+        SizedBox(width: screenHeight * 0.02),
+        Expanded(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary, // Button color
+            ),
+            onPressed: () {
+              print('Sending Invite...');
+              Navigator.pop(context);
+            },
+            child: Text('Send Invite', style: AppTextStyles.button.copyWith(color: Colors.white)),
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
-        ),
-      ),
+      ],
     );
   }
 }

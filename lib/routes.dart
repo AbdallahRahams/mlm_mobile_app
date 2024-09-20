@@ -30,6 +30,9 @@ import '../presentation/pages/settings/product_services_page.dart';
 import '../presentation/pages/auth/phone_verification.dart';
 import 'presentation/pages/home/homePage.dart';
 import 'presentation/pages/notifications/NotificationsPage.dart';
+import 'presentation/pages/ranks/ranks_page.dart';
+import 'presentation/pages/top-performers/top_performers.dart';
+import 'presentation/pages/training/trainingsPage.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -46,6 +49,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => AnalyticsDashboard());
       case '/network':
         return MaterialPageRoute(builder: (_) => NetworkPage());
+      case '/top-performers':
+        return MaterialPageRoute(builder: (_) => TopPerformersPage());
       case '/network-details':
         return MaterialPageRoute(builder: (_) => NetworkDetailsPage());
       case '/earnings':
@@ -76,6 +81,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());
       case '/contact-details':
         return MaterialPageRoute(builder: (_) => ContactDetailsPage());
+      case '/ranks':
+        return MaterialPageRoute(builder: (_) => RanksPage());
       case '/phone-verification':
         final phoneNumber = settings.arguments as String;
         return MaterialPageRoute(builder: (_) => PhoneVerificationPage(phoneNumber: phoneNumber));
@@ -93,6 +100,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => MyWalletPage());
       case '/invite':
         return MaterialPageRoute(builder: (_) => InvitePage());
+      case '/trainings':
+        return MaterialPageRoute(builder: (_) => TrainingsPage());
       case '/tasks':
         return MaterialPageRoute(builder: (_) => TasksPage());
       default:

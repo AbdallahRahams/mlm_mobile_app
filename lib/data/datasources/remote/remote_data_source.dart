@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:mlm_mobile_app/data/models/earnings_model.dart';
 import 'dart:convert';
-import '../../models/earnings.dart';
+import '../../../presentation/widgets/earnings.dart';
 import '../../models/networkDetails.dart';
 import '../../models/orderDetails.dart';
 import '../data_source.dart';

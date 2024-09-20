@@ -1,138 +1,159 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mlm_mobile_app/presentation/widgets/drawer.dart';
+import 'package:mlm_mobile_app/presentation/widgets/motivationQuotes.dart';
+import 'package:mlm_mobile_app/presentation/widgets/quickActions.dart';
 import 'package:mlm_mobile_app/presentation/widgets/reponsiveWidget.dart';
-import 'package:path/path.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:mlm_mobile_app/presentation/widgets/serviceOverview.dart';
 import '../../../app_colors.dart';
+import '../../../data/models/task.dart';
 import '../../../text_styles.dart';
 import '../../bloc/home/home_bloc.dart';
 import '../../bloc/home/home_event.dart';
 import '../../widgets/currentRankWidget.dart';
+import '../../widgets/customCards.dart';
+import '../../widgets/taskOverview.dart';
+import '../../widgets/trainingOverview.dart';
 import 'modernBottomBar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   String username = "Username";
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeBloc()..add(LoadHomePageDataEvent()),
       child: Scaffold(
-        backgroundColor: AppColors.primary, // Set background to black
+        backgroundColor: Colors.white,
         drawer: DrawerWidget(),
         body: SafeArea(
-          child: Stack(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Top section containing greeting and icons
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 12.0), // Reduced padding
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // Top section containing greeting and icons (Fixed at the top)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0, left: 12.0, right: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
                       children: [
-                        // Greeting Text with Verification Badge
-                        Row(
-                          children: [
-                            Text(
-                              'Hello, ${username.length > 5 ? username.substring(0, 5) + '...' : username}',
-                              style: AppTextStyles.heading2
-                                  .copyWith(color: Colors.white),
-                            ),
-                            SizedBox(width: 4), // Reduced spacing
-                            Icon(Icons.verified_rounded,
-                                size: 18,
-                                color: AppColors
-                                    .secondary), // Slightly smaller icon
-                          ],
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Hi, ',
+                                style: AppTextStyles.heading2.copyWith(
+                                  color: AppColors.secondary,
+                                  fontSize: 35,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '${username.length > 8 ? username.substring(0, 8) + '...' : username}',
+                                style: AppTextStyles.heading2.copyWith(
+                                  color: Colors.black,
+                                  fontSize: 35,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        // Notification and Menu Icons
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.notifications,
-                                  color: Colors.white,
-                                  size: 30), // Reduced icon size
-                              onPressed: () {
-                                Navigator.pushNamed(context, "/notifications");
-                              },
-                            ),
-                            Builder(
-                              builder: (BuildContext context) {
-                                return IconButton(
-                                  icon: Icon(Icons.menu, color: Colors.white),
-                                  onPressed: () {
-                                    Scaffold.of(context)
-                                        .openDrawer(); // Open the drawer
-                                  },
-                                );
-                              },
-                            ),
-                          ],
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Iconsax.verify5,
+                          size: 25,
+                          color: AppColors.secondary,
                         ),
                       ],
                     ),
-                  ),
-// Current Rank Widget
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12), // Reduced padding
-                    child: CurrentRankWidget(),
-                  ),
-
-                  SizedBox(height: 20),
-                  // Rest of the page content in a rounded container
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                // Horizontal line separator
-                                ResponsiveWidget(
-                                    title: "Title 1",
-                                    content:
-                                        "This is the content for widget 1."),
-                                _buildHorizontalLine(),
-                                ResponsiveWidget(
-                                    title: "Title 2",
-                                    content:
-                                        "This is the content for widget 2."),
-                                _buildHorizontalLine(),
-                                ResponsiveWidget(
-                                    title: "Title 3",
-                                    content:
-                                        "This is the content for widget 3."),
-                                _buildHorizontalLine(),
-                                ResponsiveWidget(
-                                    title: "Title 4",
-                                    content:
-                                        "This is the content for widget 4."),
-                                _buildHorizontalLine(),
-                                ResponsiveWidget(
-                                    title: "Title 5",
-                                    content:
-                                        "This is the content for widget 5."),
-                                _buildHorizontalLine(),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                    Builder(
+                      builder: (BuildContext context) {
+                        return IconButton(
+                          icon: Icon(
+                            Icons.menu_rounded,
+                            color: Colors.black,
+                            size: 35,
+                          ),
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                        );
+                      },
                     ),
+                  ],
+                ),
+              ),
+
+              // Current Rank Widget (Fixed at the top)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: CurrentRankWidget(),
+              ),
+
+              // Expanded Scrollable Section
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Carousel Cards (Scrolls)
+                      CarouselCards(
+                        cards: [
+                          EarningsCard(
+                            totalEarnings: 12345.0,
+                            commissions: 20,
+                            bonuses: 15,
+                            sales: 8,
+                          ),
+                          RankProgressCard(
+                            rank: "Gold",
+                            progress: 0.75, // 75% to next rank
+                          ),
+                          NetworkCard(
+                            level: "Level 3",
+                            downlines: 50,
+                            uplines: 5,
+                            totalInNetwork: 120,
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+                      
+                      // Task Overview Section (Scrolls)
+                      ServicesOverviewWidget(),
+                      
+                      const SizedBox(height: 20),
+
+                      // Services Overview Section (Scrolls)
+                      
+                      TaskOverviewWidget(),
+
+                      const SizedBox(height: 20),
+
+                      // Training Overview Section (Scrolls)
+                      TrainingOverviewWidget(
+                        trainings: [
+                          Training(title: "MLM Marketing Basics", date: "2024-09-25", status: "Upcoming"),
+                          Training(title: "Advanced Sales Techniques", date: "2024-09-15", status: "Completed"),
+                          Training(title: "Social Media Strategies", date: "2024-10-01", status: "Upcoming"),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Optional: Motivational Quotes
+                      // MotivationalQuotesWidget(),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -143,10 +164,15 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildHorizontalLine() {
-    return Divider(
-      color: Colors.grey.shade300,
-      thickness: 1,
-      height: 20,
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8, // 80% of screen width
+        child: Divider(
+          color: Colors.grey.shade200, // Lighter color for lower contrast
+          thickness: 2, // Thicker line
+          height: 20,
+        ),
+      ),
     );
   }
 }

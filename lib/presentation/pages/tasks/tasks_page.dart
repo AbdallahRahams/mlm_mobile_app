@@ -1,162 +1,134 @@
 import 'package:flutter/material.dart';
-import 'package:mlm_mobile_app/app_colors.dart'; // Import your custom colors
-import 'package:mlm_mobile_app/text_styles.dart'; // Import your custom text styles
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../app_colors.dart';
+import '../../../data/models/task.dart';
+import '../../bloc/task/task_bloc.dart';
+
+import 'add_task_page.dart';
 
 class TasksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: Text('Tasks', style: AppTextStyles.heading21),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddTaskPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Your Tasks',
-                style: AppTextStyles.subheading2,
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildTaskTile(
-                      task: 'Complete Flutter tutorial',
-                      dueDate: '2024-09-15',
-                      isCompleted: false,
-                    ),
-                    _buildTaskTile(
-                      task: 'Update app documentation',
-                      dueDate: '2024-09-20',
-                      isCompleted: true,
-                    ),
-                    _buildTaskTile(
-                      task: 'Review code',
-                      dueDate: '2024-09-25',
-                      isCompleted: false,
-                    ),
-                    // Add more tasks here
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return BlocProvider(
+      create: (context) => TaskBloc()..add(LoadTasksEvent()),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.primary,
+          title: Text('Tasks', style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddTaskPage()),
+                );
+              },
+            ),
+          ],
         ),
-      ),
-    );
-  }
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Your Tasks',
+                  style: TextStyle(fontSize: 20, color: AppColors.primary),
+                ),
+                SizedBox(height: 10),
+                Expanded(
+                  child: BlocBuilder<TaskBloc, TaskState>(
+                    builder: (context, state) {
+                      if (state is TasksLoaded) {
+                        if (state.tasks.isEmpty) {
+                          return Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('No tasks available.', style: TextStyle(color: Colors.grey)),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => AddTaskPage()),
+                                    );
+                                  },
+                                  child: Text('Add Task'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
 
-  Widget _buildTaskTile({
-    required String task,
-    required String dueDate,
-    required bool isCompleted,
-  }) {
-    return Card(
-      elevation: 3,
-      margin: EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      color: Colors.white,
-      child: ListTile(
-        leading: Checkbox(
-          value: isCompleted,
-          onChanged: (bool? value) {
-            // Handle task completion toggle
-          },
-          activeColor: AppColors.secondary, // Set the color of the checked checkbox
-        ),
-        title: Text(
-          task,
-          style: TextStyle(
-            decoration: isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-            color: isCompleted ? Colors.grey : AppColors.text,
-          ),
-        ),
-        subtitle: Text('Due: $dueDate', style: TextStyle(color: Colors.grey)),
-        trailing: IconButton(
-          icon: Icon(Icons.delete, color: AppColors.error),
-          onPressed: () {
-            // Handle delete task action
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class AddTaskPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: Text('Add Task', style: AppTextStyles.heading21),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'New Task',
-                style: AppTextStyles.subheading2,
-              ),
-              SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Task Title',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                ),
-                maxLength: 50,
-              ),
-              SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Due Date',
-                  border: OutlineInputBorder(),
-                  hintText: 'YYYY-MM-DD',
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                ),
-                keyboardType: TextInputType.datetime,
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.secondary,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                        return ListView.builder(
+                          itemCount: state.tasks.length,
+                          itemBuilder: (context, index) {
+                            final task = state.tasks[index];
+                            return _buildTaskTile(task, context);
+                          },
+                        );
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
                   ),
                 ),
-                onPressed: () {
-                  // Handle Add Task action
-                },
-                child: Text('Add Task', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildTaskTile(Task task, BuildContext context) {
+  DateTime? dueDate;
+
+  // Try parsing the dueDate, if it fails, set dueDate to null
+  try {
+    dueDate = DateTime.parse(task.dueDate);
+  } catch (e) {
+    print('Invalid date format: ${task.dueDate}');
+    dueDate = null;
+  }
+
+  return Card(
+    elevation: 3,
+    margin: EdgeInsets.symmetric(vertical: 8),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+    ),
+    color: Colors.white,
+    child: ListTile(
+      title: Text(
+        task.title,
+        style: TextStyle(
+          decoration: task.status == "Completed" ? TextDecoration.lineThrough : TextDecoration.none,
+          color: task.status == "Completed" ? Colors.grey : AppColors.text,
+        ),
+      ),
+      subtitle: Text(
+        'Due: ${dueDate != null ? dueDate.toString() : 'Invalid Date'} ${_getTaskStatus(task)}',
+        style: TextStyle(color: Colors.grey),
+      ),
+      trailing: IconButton(
+        icon: Icon(Icons.delete, color: AppColors.error),
+        onPressed: () {
+          context.read<TaskBloc>().add(DeleteTaskEvent(task: task));
+        },
+      ),
+    ),
+  );
+}
+
+String _getTaskStatus(Task task) {
+  if (task.status == "Completed") return "(Completed)";
+  return task.isOverdue() ? "(Overdue)" : "(Pending)";
+}
+
 }

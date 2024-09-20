@@ -1,179 +1,186 @@
 import 'package:flutter/material.dart';
-import 'package:mlm_mobile_app/app_colors.dart'; // Assuming this contains your color constants
+import 'package:iconsax/iconsax.dart';
+import 'package:mlm_mobile_app/app_colors.dart'; // Custom app colors
 
 class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      width: MediaQuery.of(context).size.width * 0.7, // 70% of screen width
-      child: SafeArea(
-        child: Column(
-          children: [
-            // Upper part with Avatar and Total Earnings
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.primary.withOpacity(0.9),
-                    AppColors.primary.withOpacity(0.9),
-                  ],
-                ),
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Avatar with option to change
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.grey[200],
-                        child: Icon(Icons.person,
-                            size: 40, color: Colors.grey[700]),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 4,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(4),
-                          child: Icon(Icons.camera_alt,
-                              color: Colors.white, size: 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  // Total Earnings text
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Total Earnings: ',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '\$1234.56', // Replace with dynamic value
-                          style: TextStyle(
-                            color: AppColors.secondary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Lower part with fading background and menu options
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.primary.withOpacity(0.8),
-                      AppColors.primary.withOpacity(0.9),
-                    ],
-                  ),
-                ),
+    return SafeArea(
+      child: FractionallySizedBox(
+        widthFactor: 0.7, // 70% of screen width
+        child: Drawer(
+          backgroundColor: AppColors.primary.withOpacity(0.9),
+          child: Column(
+            children: [
+              _buildDrawerHeader(), // Header section (Avatar, Username, Role)
+              Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
+                    _buildSection('Account'),
                     _buildDrawerItem(
-                      icon: Icons.person_add,
+                      icon: Iconsax.user_add4,
                       text: 'Invite',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/invite");
-                      },
+                      onTap: () => Navigator.pushNamed(context, "/invite"),
                     ),
                     _buildDrawerItem(
-                      icon: Icons.account_balance_wallet,
-                      text: 'My Wallet',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/my-wallet");
-                      },
+                      icon: Iconsax.notification,
+                      text: 'Notifications',
+                      onTap: () => Navigator.pushNamed(context, "/notification"),
                     ),
                     _buildDrawerItem(
-                      icon: Icons.bar_chart,
-                      text: 'Earnings',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/earnings");
-                      },
-                    ),
-                    _buildDrawerItem(
-                      icon: Icons.payment,
-                      text: 'Payment Info',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/payment-info");
-                      },
-                    ),
-                    _buildDrawerItem(
-                      icon: Icons.person,
+                      icon: Iconsax.profile_2user,
                       text: 'Profile',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/profile");
-                      },
+                      onTap: () => Navigator.pushNamed(context, "/profile"),
+                    ),
+                    const Divider(thickness: 1.5),
+      
+                    _buildSection('Financials'),
+                    _buildDrawerItem(
+                      icon: Iconsax.wallet_2,
+                      text: 'My Wallet',
+                      onTap: () => Navigator.pushNamed(context, "/my-wallet"),
                     ),
                     _buildDrawerItem(
-                      icon: Icons.lock,
+                      icon: Iconsax.chart,
+                      text: 'Earnings',
+                      onTap: () => Navigator.pushNamed(context, "/earnings"),
+                    ),
+                    _buildDrawerItem(
+                      icon: Iconsax.card_edit,
+                      text: 'Payment Info',
+                      onTap: () => Navigator.pushNamed(context, "/payment-info"),
+                    ),
+                    const Divider(thickness: 1.5),
+      
+                    _buildSection('Performance'),
+                    _buildDrawerItem(
+                      icon: Iconsax.ranking,
+                      text: 'Ranks',
+                      onTap: () => Navigator.pushNamed(context, "/ranks"),
+                    ),
+                    _buildDrawerItem(
+                      icon: Iconsax.crown_1,
+                      text: 'Top Performers',
+                      onTap: () => Navigator.pushNamed(context, "/top-performers"),
+                    ),
+                    const Divider(thickness: 1.5),
+      
+                    _buildSection('Other'),
+                    _buildDrawerItem(
+                      icon: Iconsax.book_square,
+                      text: 'Training',
+                      onTap: () => Navigator.pushNamed(context, "/trainings"),
+                    ),
+                    _buildDrawerItem(
+                      icon: Iconsax.lock,
                       text: 'Change Password',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/change-password");
-                      },
+                      onTap: () => Navigator.pushNamed(context, "/change-password"),
                     ),
                     _buildDrawerItem(
-                      icon: Icons.settings,
+                      icon: Iconsax.setting_2,
                       text: 'Settings',
-                      onTap: () {
-                        Navigator.pushNamed(context, "/settings");
-                      },
+                      onTap: () => Navigator.pushNamed(context, "/settings"),
                     ),
-                    // Logout button with red text
-                    ListTile(
-                      leading: Icon(Icons.exit_to_app, color: Colors.red),
-                      title:
-                          Text('Logout', style: TextStyle(color: Colors.red)),
-                      onTap: () {
-                        Navigator.pushNamed(context, "/signin");
-                      },
+                    const Divider(thickness: 1.5, color: Colors.red),
+      
+                    // Logout item
+                    _buildDrawerItem(
+                      icon: Icons.exit_to_app,
+                      text: 'Logout',
+                      iconColor: Colors.red,
+                      textColor: Colors.red,
+                      onTap: () => Navigator.pushNamed(context, "/signin"),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Helper method to build each drawer item
+  Widget _buildDrawerHeader() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12), // Adjust padding for better responsiveness
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.primary, AppColors.primary.withOpacity(0.9)],
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: Colors.grey[200],
+            child: Icon(Icons.person, size: 40, color: Colors.grey[700]),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'John Doe', // Dynamic username
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Marketer', // Dynamic role
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Category title
+  Widget _buildSection(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0), // Increased vertical padding for better spacing
+      child: Center(
+        child: Text(
+          title,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Drawer item with icon and text
   Widget _buildDrawerItem({
     required IconData icon,
     required String text,
     required GestureTapCallback onTap,
+    Color iconColor = AppColors.secondary, // Use secondary color for icons
+    Color textColor = Colors.white,
   }) {
     return ListTile(
-      leading: Icon(icon,
-          color: AppColors.secondary), // Use secondary color for icons
+      leading: Icon(icon, color: iconColor),
       title: Text(
         text,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: textColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       onTap: onTap,
     );
