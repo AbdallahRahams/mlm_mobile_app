@@ -13,72 +13,18 @@ class TaskOverviewWidget extends StatefulWidget {
 }
 
 class _TaskOverviewWidgetState extends State<TaskOverviewWidget> {
-  void _showAllTasks(List<Task> tasks) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return FractionallySizedBox(
-          heightFactor: 0.85,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 12),
-                  Text(
-                    "All Tasks",
-                    style: AppTextStyles.heading2.copyWith(
-                      color: AppColors.primary,
-                      fontSize: 24,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  tasks.isEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "You have no tasks scheduled yet.",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                "Tap the button below to add new task schedules.",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[600],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: tasks.length,
-                          itemBuilder: (context, index) {
-                            final task = tasks[index];
-                            return ListTile(
-                              title: Text(task.title),
-                              subtitle: Text(
-                                  'Due: ${task.dueDate}, Hours: ${task.hours}, Status: ${task.status}'),
-                            );
-                          },
-                        ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+  // Function to group tasks by status and return a map
+  Map<String, List<Task>> _groupTasksByStatus(List<Task> tasks) {
+    Map<String, List<Task>> taskMap = {
+      'Pending': [],
+      'In Progress': [],
+      'Completed': []
+    };
+
+    for (var task in tasks) {
+      taskMap[task.status]?.add(task);
+    }
+    return taskMap;
   }
 
   @override
@@ -86,66 +32,90 @@ class _TaskOverviewWidgetState extends State<TaskOverviewWidget> {
     return BlocBuilder<TaskBloc, TaskState>(
       builder: (context, state) {
         if (state is TasksLoaded) {
+          // Group tasks by status
+          final groupedTasks = _groupTasksByStatus(state.tasks);
+
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              state.tasks.isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "You have no tasks scheduled yet.",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: AppColors.primary,
-                            ),
-                            textAlign: TextAlign.center,
+              const SizedBox(height: 10),
+              // Header with "My Tasks" and add button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'My Tasks',
+                      style: AppTextStyles.heading2,
+                    ),
+                    IconButton(
+                      icon: const Icon(Iconsax.add, size: 24),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTaskPage(),
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            "Tap the button below to add new task schedules.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddTaskPage(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                            ),
-                            child: Text('Add Task', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.tasks.length,
-                      itemBuilder: (context, index) {
-                        final task = state.tasks[index];
-                        return ListTile(
-                          title: Text(task.title),
-                          subtitle: Text(
-                              'Due: ${task.dueDate}, Hours: ${task.hours}, Status: ${task.status}'),
                         );
                       },
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Overview of task counts by status with ExpansionTile
+              ...groupedTasks.entries.map((entry) {
+                final status = entry.key;
+                final tasks = entry.value;
+                return _buildTaskGroup(status, tasks);
+              }).toList(),
+              const SizedBox(height: 30),
             ],
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  // Function to build individual task groups with dropdown functionality
+  Widget _buildTaskGroup(String status, List<Task> tasks) {
+    return ExpansionTile(
+      title: Text(
+        '$status (${tasks.length})',
+        style: TextStyle(
+          color: _getStatusColor(status),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      iconColor: AppColors.primary,
+      children: tasks.map((task) {
+        return ListTile(
+          title: Text(task.title),
+          subtitle: Text('Due: ${task.dueDate}'),
+          trailing: IconButton(
+            icon: Icon(Iconsax.trash, color: AppColors.error),
+            onPressed: () {
+              context.read<TaskBloc>().add(DeleteTaskEvent(task: task));
+            },
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  // Function to determine color based on status
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'Pending':
+        return AppColors.primary; // Bright Yellow
+      case 'In Progress':
+        return AppColors.primary; // Bright Blue
+      case 'Completed':
+        return AppColors.primary; // Green Success
+      default:
+        return AppColors.primary; // Deep Blue
+    }
   }
 }

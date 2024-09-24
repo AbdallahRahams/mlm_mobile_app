@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mlm_mobile_app/presentation/widgets/drawer.dart';
+import 'package:mlm_mobile_app/presentation/widgets/greetingHeader.dart';
 import 'package:mlm_mobile_app/presentation/widgets/motivationQuotes.dart';
 import 'package:mlm_mobile_app/presentation/widgets/quickActions.dart';
-import 'package:mlm_mobile_app/presentation/widgets/reponsiveWidget.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mlm_mobile_app/presentation/widgets/serviceOverview.dart';
 import '../../../app_colors.dart';
@@ -13,6 +13,7 @@ import '../../bloc/home/home_bloc.dart';
 import '../../bloc/home/home_event.dart';
 import '../../widgets/currentRankWidget.dart';
 import '../../widgets/customCards.dart';
+import '../../widgets/latest_news.dart';
 import '../../widgets/taskOverview.dart';
 import '../../widgets/trainingOverview.dart';
 import 'modernBottomBar.dart';
@@ -26,88 +27,46 @@ class _HomePageState extends State<HomePage> {
   String username = "Username";
   int currentIndex = 0;
 
+   final List<String> newsItems = [
+    'Company hits new milestone!',
+    'New product launches this week!',
+    'Upcoming training event for all distributors',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeBloc()..add(LoadHomePageDataEvent()),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF2F6FC),
         drawer: DrawerWidget(),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top section containing greeting and icons (Fixed at the top)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0, left: 12.0, right: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Hi, ',
-                                style: AppTextStyles.heading2.copyWith(
-                                  color: AppColors.secondary,
-                                  fontSize: 35,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '${username.length > 8 ? username.substring(0, 8) + '...' : username}',
-                                style: AppTextStyles.heading2.copyWith(
-                                  color: Colors.black,
-                                  fontSize: 35,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Iconsax.verify5,
-                          size: 25,
-                          color: AppColors.secondary,
-                        ),
-                      ],
-                    ),
-                    Builder(
-                      builder: (BuildContext context) {
-                        return IconButton(
-                          icon: Icon(
-                            Icons.menu_rounded,
-                            color: Colors.black,
-                            size: 35,
-                          ),
-                          onPressed: () {
-                            Scaffold.of(context).openDrawer();
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
+              
+              GreetingHeader(username: username),
+              
               // Current Rank Widget (Fixed at the top)
+              /*
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 child: CurrentRankWidget(),
               ),
+              */
 
               // Expanded Scrollable Section
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+
+                      
                       // Carousel Cards (Scrolls)
                       CarouselCards(
                         cards: [
                           EarningsCard(
-                            totalEarnings: 12345.0,
+                            totalEarnings: 100.0,
                             commissions: 20,
                             bonuses: 15,
                             sales: 8,
@@ -126,9 +85,10 @@ class _HomePageState extends State<HomePage> {
                       ),
 
                       const SizedBox(height: 20),
+
+                      QuickActionsWidget(),
                       
-                      // Task Overview Section (Scrolls)
-                      ServicesOverviewWidget(),
+                      // Task Overview Section (Scrolls)  ServicesOverviewWidget(), LatestNewsSection(newsTitles: newsItems),
                       
                       const SizedBox(height: 20),
 
@@ -138,6 +98,7 @@ class _HomePageState extends State<HomePage> {
 
                       const SizedBox(height: 20),
 
+                      /*
                       // Training Overview Section (Scrolls)
                       TrainingOverviewWidget(
                         trainings: [
@@ -146,8 +107,11 @@ class _HomePageState extends State<HomePage> {
                           Training(title: "Social Media Strategies", date: "2024-10-01", status: "Upcoming"),
                         ],
                       ),
+                      */
 
                       const SizedBox(height: 20),
+
+                      
 
                       // Optional: Motivational Quotes
                       // MotivationalQuotesWidget(),

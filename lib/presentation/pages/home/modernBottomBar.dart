@@ -28,9 +28,9 @@ class _ModernBottomNavBarState extends State<ModernBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: AppColors.primary, // Cleaner color usage
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Cleaner color usage
       selectedItemColor:  AppColors.secondary, // Selected color from AppColors
-      unselectedItemColor: AppColors.backgroundLight, // Unselected color
+      unselectedItemColor: AppColors.primary, // Unselected color
       type: BottomNavigationBarType.fixed, // Keeps labels visible
       currentIndex: _selectedIndex, // Track the selected tab
       onTap: _onItemTapped, // Handle navigation on item tap

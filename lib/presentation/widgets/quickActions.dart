@@ -1,54 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../app_colors.dart';
-import '../../text_styles.dart';
 
 class QuickActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Get the screen width
-    final screenWidth = MediaQuery.of(context).size.width;
-    final containerWidth = screenWidth * 0.8; // 80% of the screen width
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9, // Responsive width
+        padding: const EdgeInsets.all(8.0), // Reduced padding for compact layout
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Dynamically calculate the number of columns based on screen size
+                int crossAxisCount = constraints.maxWidth > 600 ? 4 : 3;
+                return GridView.count(
+                  shrinkWrap: true, // GridView takes only necessary space
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 4, // Reduced space between columns
+                  mainAxisSpacing: 4,  // Reduced space between rows
+                  physics: NeverScrollableScrollPhysics(), // Disable scrolling
+                  children: [
 
-    return Container(
-      width: containerWidth, // Set the width to 80% of screen width
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Quick Actions', style: AppTextStyles.heading2),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildActionButton(Icons.add_task, 'New Task'),
-              _buildActionButton(Icons.report, 'Reports'),
-              _buildActionButton(Icons.support, 'Support'),
-            ],
-          ),
-        ],
+                    CompactActionButton(
+                      icon: Iconsax.user_add4,
+                      label: "Invite",
+                      color: AppColors.primary,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/invite');
+                      },
+                    ),
+                    CompactActionButton(
+                      icon: Iconsax.book_square,
+                      label: "Trainings",
+                      color: AppColors.primary,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/trainings');
+                      },
+                    ),
+                    CompactActionButton(
+                      icon: Iconsax.support,
+                      label: "Support & Help",
+                      color: AppColors.primary,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/support');
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildActionButton(IconData icon, String label) {
-    return Column(
-      children: [
-        Icon(icon, size: 30, color: AppColors.secondary),
-        SizedBox(height: 5),
-        Text(label, style: AppTextStyles.bodyText2),
-      ],
+// A custom widget for compact quick action buttons
+class CompactActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onPressed;
+
+  CompactActionButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 28, // Slightly reduced icon size for a more compact look
+            color: color,
+          ),
+          SizedBox(height: 4), // Reduced space between icon and text
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13, // Slightly reduced font size for compactness
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

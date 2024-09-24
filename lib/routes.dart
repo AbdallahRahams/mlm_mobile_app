@@ -3,6 +3,8 @@ import 'package:mlm_mobile_app/presentation/bloc/home/home_state.dart';
 import 'package:mlm_mobile_app/presentation/pages/invite/invite_page.dart';
 import 'package:mlm_mobile_app/presentation/pages/paymentInfo/payment_info_page.dart';
 import 'package:mlm_mobile_app/presentation/pages/profile/profile_page.dart';
+import 'package:mlm_mobile_app/presentation/pages/services/services.dart';
+import 'package:mlm_mobile_app/presentation/pages/support/support_page.dart';
 import 'package:mlm_mobile_app/presentation/pages/tasks/tasks_page.dart';
 import 'package:mlm_mobile_app/presentation/pages/wallet/my_wallet_page.dart';
 import '../presentation/pages/auth/signin_page.dart';
@@ -63,6 +65,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => ReferralDetailsPage());
       case '/orders':
         return MaterialPageRoute(builder: (_) => OrdersPage());
+      case '/services':
+        return MaterialPageRoute(builder: (_) => ServicesPage());
       case '/order-details':
         return MaterialPageRoute(builder: (_) => OrderDetailsPage());
       case '/products':
@@ -94,6 +98,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const NotificationPage());
       case '/profile':
         return MaterialPageRoute(builder: (_) => ProfilePage());
+      case '/support':
+        return MaterialPageRoute(builder: (_) => SupportPage());
       case '/payment-info':
         return MaterialPageRoute(builder: (_) => PaymentInfoPage());
       case '/my-wallet':

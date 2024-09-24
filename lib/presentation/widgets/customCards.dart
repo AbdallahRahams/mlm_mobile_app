@@ -1,81 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../app_colors.dart';
 import '../../../text_styles.dart';
 
-class DashboardPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        backgroundColor: AppColors.primary,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    CarouselCards(
-                      cards: [
-                        EarningsCard(
-                          totalEarnings: 1250.75,
-                          commissions: 45,
-                          bonuses: 30,
-                          sales: 120,
-                        ),
-                        RankProgressCard(
-                          rank: 'Silver',
-                          progress: 0.65,
-                        ),
-                        NetworkCard(
-                          level: 'Level 3',
-                          downlines: 120,
-                          uplines: 30,
-                          totalInNetwork: 151,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Carousel Cards
-class CarouselCards extends StatelessWidget {
+class CarouselCards extends StatefulWidget {
   final List<Widget> cards;
 
   CarouselCards({required this.cards});
 
   @override
+  _CarouselCardsState createState() => _CarouselCardsState();
+}
+
+class _CarouselCardsState extends State<CarouselCards> {
+  PageController _pageController = PageController(viewportFraction: 1.0);
+  int _currentPage = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      child: PageView.builder(
-        itemCount: cards.length,
-        controller: PageController(viewportFraction: 0.85),
-        itemBuilder: (context, index) {
-          return Transform.scale(
-            scale: 0.95,
-            child: cards[index],
-          );
-        },
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: 250,
+          child: PageView.builder(
+            itemCount: widget.cards.length,
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentPage = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              return Transform.scale(
+                scale: 0.95,
+                child: widget.cards[index],
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 10),
+        AnimatedSmoothIndicator(
+          activeIndex: _currentPage,
+          count: widget.cards.length,
+          effect: ExpandingDotsEffect(
+            dotHeight: 8,
+            dotWidth: 8,
+            activeDotColor: AppColors.primary, // Light color for active dots
+            dotColor: Colors.grey.shade300, // Lighter dots
+            expansionFactor: 2.5,
+          ),
+        ),
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }
 
-// Earnings Card
 class EarningsCard extends StatelessWidget {
   final double totalEarnings;
   final int commissions;
@@ -93,28 +80,28 @@ class EarningsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       title: 'Earnings',
-      icon: Iconsax.money_34,
-      description: '',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             '\$$totalEarnings',
-            style: AppTextStyles.heading2.copyWith(color: AppColors.secondary),
+            style: AppTextStyles.heading2.copyWith(color: AppColors.primary, fontSize: 35),
           ),
           Text(
             'Lifetime',
-            style: AppTextStyles.bodyText2
-                .copyWith(color: Colors.white.withOpacity(0.6)),
+            style: AppTextStyles.bodyText2.copyWith(
+              color: Colors.black.withOpacity(0.6), // Changed to darker text
+              fontWeight: FontWeight.w500,
+            ),
           ),
           SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildEarningsDetail('$commissions', 'Commissions'),
-              Text('|', style: TextStyle(color: Colors.white.withOpacity(0.6))),
+              _divider(),
               _buildEarningsDetail('$bonuses', 'Bonuses'),
-              Text('|', style: TextStyle(color: Colors.white.withOpacity(0.6))),
+              _divider(),
               _buildEarningsDetail('$sales', 'Sales'),
             ],
           ),
@@ -128,19 +115,27 @@ class EarningsCard extends StatelessWidget {
       children: [
         Text(
           value,
-          style: AppTextStyles.bodyText1.copyWith(color: Colors.white),
+          style: AppTextStyles.bodyText1.copyWith(color: Colors.black), // Darker text
         ),
         Text(
           label,
-          style: AppTextStyles.bodyText2
-              .copyWith(color: Colors.white.withOpacity(0.6)),
+          style: AppTextStyles.bodyText2.copyWith(
+            color: Colors.black.withOpacity(0.6), // Darker label
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
   }
+
+  Widget _divider() {
+    return Text(
+      '|',
+      style: TextStyle(color: Colors.black.withOpacity(0.6)), // Dark divider
+    );
+  }
 }
 
-// Rank Progress Card
 class RankProgressCard extends StatelessWidget {
   final String rank;
   final double progress;
@@ -154,8 +149,6 @@ class RankProgressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       title: 'Rank Progress',
-      icon: Iconsax.medal_star,
-      description: '',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -168,13 +161,14 @@ class RankProgressCard extends StatelessWidget {
               center: Text(
                 "${(progress * 100).toStringAsFixed(1)}%",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Color(0xFFFFD700)),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: Colors.orangeAccent, // Light mode color
+                ),
               ),
               circularStrokeCap: CircularStrokeCap.round,
-              progressColor: const Color(0xFFFFD700),
-               backgroundColor: Colors.transparent,//const Color.fromARGB(255, 146, 145, 145), // Optional background color
+              progressColor: Colors.orangeAccent, // Light progress color
+              backgroundColor: Colors.grey.shade300, // Light background
             ),
           ),
           SizedBox(height: 10),
@@ -183,14 +177,23 @@ class RankProgressCard extends StatelessWidget {
             children: [
               Text(
                 '${(progress * 100).toStringAsFixed(1)}% to next rank',
-                style: AppTextStyles.bodyText2
-                    .copyWith(color: Colors.white.withOpacity(0.6)),
+                style: AppTextStyles.bodyText2.copyWith(
+                  color: Colors.black.withOpacity(0.6), // Darker text
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              Text('|', style: TextStyle(color: Colors.white.withOpacity(0.6))),
+              Text(
+      '|',
+      style: TextStyle(color: Colors.black.withOpacity(0.6),
+      fontWeight: FontWeight.w500,), // Dark divider
+      
+    ),
               Text(
                 '∼ ${(progress) * 200} Points',
-                style: AppTextStyles.bodyText2
-                    .copyWith(color: Colors.white.withOpacity(0.6)),
+                style: AppTextStyles.bodyText2.copyWith(
+                  color: Colors.black.withOpacity(0.6), // Darker text
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -200,7 +203,6 @@ class RankProgressCard extends StatelessWidget {
   }
 }
 
-// Network Card
 class NetworkCard extends StatelessWidget {
   final String level;
   final int downlines;
@@ -218,24 +220,22 @@ class NetworkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       title: 'Network',
-      icon: Iconsax.hierarchy_square,
-      description: '',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             level,
-            style: AppTextStyles.heading2.copyWith(color: Colors.white),
+            style: AppTextStyles.heading2.copyWith(color: Colors.black), // Darker text
           ),
           SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildNetworkDetail('$downlines', 'Downlines'),
-              Text('|', style: TextStyle(color: Colors.white.withOpacity(0.6))),
+              _divider(),
               _buildNetworkDetail('$uplines', 'Uplines'),
-              Text('|', style: TextStyle(color: Colors.white.withOpacity(0.6))),
-              _buildNetworkDetail('$totalInNetwork', 'Network')
+              _divider(),
+              _buildNetworkDetail('$totalInNetwork', 'Network'),
             ],
           ),
         ],
@@ -248,29 +248,35 @@ class NetworkCard extends StatelessWidget {
       children: [
         Text(
           value,
-          style: AppTextStyles.bodyText1.copyWith(color: Colors.white),
+          style: AppTextStyles.bodyText1.copyWith(color: Colors.black), // Darker text
         ),
         Text(
           label,
-          style: AppTextStyles.bodyText2
-              .copyWith(color: Colors.white.withOpacity(0.6)),
+          style: AppTextStyles.bodyText2.copyWith(
+            color: Colors.black.withOpacity(0.6), // Darker label
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
   }
+
+  Widget _divider() {
+    return Text(
+      '|',
+      style: TextStyle(color: Colors.black.withOpacity(0.6),
+      fontWeight: FontWeight.w500,), // Dark divider
+      
+    );
+  }
 }
 
-// Reusable CustomCard widget
 class CustomCard extends StatelessWidget {
   final String title;
-  final IconData icon;
-  final String description;
   final Widget child;
 
   CustomCard({
     required this.title,
-    required this.icon,
-    required this.description,
     required this.child,
   });
 
@@ -280,7 +286,7 @@ class CustomCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: Colors.white, // Light background for cards
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -294,22 +300,12 @@ class CustomCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                color: AppColors.accent,
-                size: 40,
-              ),
-              SizedBox(width: 15),
-              Text(
-                title,
-                style: AppTextStyles.heading3.copyWith(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
-              ),
-            ],
+          Text(
+            title,
+            style: AppTextStyles.heading3.copyWith(
+              color: Colors.black, // Darker text for titles
+              fontSize: 30,
+            ),
           ),
           SizedBox(height: 15),
           Expanded(child: child),

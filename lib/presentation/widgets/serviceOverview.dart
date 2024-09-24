@@ -10,8 +10,8 @@ class ServicesOverviewWidget extends StatefulWidget {
 
 class _ServicesOverviewWidgetState extends State<ServicesOverviewWidget> {
   final List<Map<String, dynamic>> services = [
-    {"name": "Software Development", "image": "assets/images/logo.png", "price": "\$1200"},
-    {"name": "SEO", "image": "assets/images/logo.png", "price": "\$800"},
+    {"name": "Software Development", "image": "assets/images/SE.png", "price": "\$1200"},
+    {"name": "SEO", "image": "assets/images/SEO.png", "price": "\$800"},
     {"name": "Business Development", "image": "assets/images/logo.png", "price": "\$1000"},
     {"name": "Marketing Plan", "image": "assets/images/logo.png", "price": "\$500"},
     {"name": "Graphics and Motion Graphics", "image": "assets/images/logo.png", "price": "\$600"},

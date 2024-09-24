@@ -1,3 +1,5 @@
+import 'package:mlm_mobile_app/presentation/pages/network/network_page.dart';
+
 abstract class NetworkState {}
 
 class NetworkInitial extends NetworkState {}
@@ -18,6 +20,10 @@ class NetworkLoaded extends NetworkState {
     required this.totalEarnings,
     required this.ranking,
   });
+
+  get totalDownlines => null;
+
+  get invitesSent => null;
 }
 
 class NetworkError extends NetworkState {

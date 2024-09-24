@@ -19,20 +19,16 @@ class DrawerWidget extends StatelessWidget {
                   children: [
                     _buildSection('Account'),
                     _buildDrawerItem(
-                      icon: Iconsax.user_add4,
-                      text: 'Invite',
-                      onTap: () => Navigator.pushNamed(context, "/invite"),
-                    ),
-                    _buildDrawerItem(
-                      icon: Iconsax.notification,
-                      text: 'Notifications',
-                      onTap: () => Navigator.pushNamed(context, "/notification"),
-                    ),
-                    _buildDrawerItem(
                       icon: Iconsax.profile_2user,
                       text: 'Profile',
                       onTap: () => Navigator.pushNamed(context, "/profile"),
                     ),
+                    _buildDrawerItem(
+                      icon: Iconsax.notification,
+                      text: 'Notifications',
+                      onTap: () => Navigator.pushNamed(context, "/notifications"),
+                    ),
+                    
                     const Divider(thickness: 1.5),
       
                     _buildSection('Financials'),

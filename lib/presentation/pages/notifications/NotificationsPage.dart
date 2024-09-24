@@ -133,30 +133,9 @@ class _NotificationPageState extends State<NotificationPage> {
                 child: CustomScrollView(
                   slivers: [
                     SliverAppBar(
-                      automaticallyImplyLeading: false, // Remove the back button
-                      expandedHeight: 200.0,
-                      floating: true,
-                      pinned: true,
-                      flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true, // Keep title centered after scrolling
-                        title: const Text(
-                          "NOTIFICATIONS",
-                          style: AppTextStyles.heading21,
-                          textAlign: TextAlign.center,
-                        ),
-                        background: Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [AppColors.primary, Color.fromARGB(255, 0, 1, 1)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.vertical(
-                              bottom: Radius.circular(20), // Curve bottom of SliverAppBar
-                            ),
-                          ),
-                        ),
-                      ),
+                     title: Text("Notification", style: AppTextStyles.appBartext,),
+                     leading: Icon(Icons.arrow_back, color: AppColors.secondary,),
+                     backgroundColor: AppColors.primary,
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -221,26 +200,6 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
               ),
             ],
-          ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-            ),
           ),
         ],
       ),
