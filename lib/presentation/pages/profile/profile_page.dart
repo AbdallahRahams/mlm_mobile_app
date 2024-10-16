@@ -1,53 +1,66 @@
 import 'package:flutter/material.dart';
-
 import '../../../app_colors.dart';
 import '../../../text_styles.dart';
+import 'qrCodeGenerator.dart';
 
-// ProfilePage class implementation
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
 
     return Scaffold(
+      backgroundColor: AppColors.whiteTheme,
       appBar: AppBar(
+        elevation: 0,
+        foregroundColor: AppColors.whiteTheme,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.secondary),
+          icon: Icon(Icons.arrow_back, color: AppColors.primary),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
           'Profile',
-          style: AppTextStyles.appBartext,
+          style: AppTextStyles.appBartext.copyWith(
+            fontSize: screenWidth * 0.07,
+            color: AppColors.primary,
+          ),
         ),
-        backgroundColor: AppColors.primary,
+        centerTitle: true,
+        backgroundColor: AppColors.whiteTheme,  // Keep background color consistent
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.05,
+          vertical: screenHeight * 0.03,
+        ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Category: Personal Information
-              _buildCategoryTitle('Personal Information'),
-              _buildProfileDetailsSection(),
-              SizedBox(height: screenHeight * 0.04),
-
-              // Category: Account Details
-              Divider(color: AppColors.primary, thickness: 1),
-              _buildCategoryTitle('Account Details'),
-              _buildAccountDetailsSection(),
-              SizedBox(height: screenHeight * 0.04),
-
-              // Category: MLM Metrics
-              Divider(color: AppColors.primary, thickness: 1),
-              _buildCategoryTitle('MLM Metrics'),
-              _buildMetricsSection(),
-              SizedBox(height: screenHeight * 0.04),
-
-              // Edit Profile Button
-              _buildEditProfileButton(screenHeight),
+              _buildSectionCard(
+                context,
+                title: 'Personal Information',
+                children: _buildProfileDetailsSection(screenWidth),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              
+              _buildSectionCard(
+                context,
+                title: 'Account Details',
+                children: _buildAccountDetailsSection(screenWidth),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              
+              _buildSectionCard(
+                context,
+                title: 'MLM Metrics',
+                children: _buildMetricsSection(screenWidth),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              
             ],
           ),
         ),
@@ -55,120 +68,97 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Category Titles
-  Widget _buildCategoryTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        title,
-        style: AppTextStyles.heading3.copyWith(color: AppColors.primary),
+  // Card with Section Title and Content
+  Widget _buildSectionCard(BuildContext context, {required String title, required List<Widget> children}) {
+    return Card(
+      color: AppColors.cards,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: AppTextStyles.heading3.copyWith(
+                color: AppColors.primary,
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
+            ),
+            SizedBox(height: 10),
+            ...children,
+          ],
+        ),
       ),
     );
   }
 
   // Section: Profile Details (Personal Information)
-  Widget _buildProfileDetailsSection() {
-    return Column(
-      children: [
-        _buildEditableRow("Email", "email@example.com"),
-        _buildEditableRow("Mobile", "+255 765 094 XXX"),
-        _buildEditableRow("Gender", "Male/Female"),
-        _buildEditableRow("Date of Birth", "14th Oct, 2XXX"),
-      ],
-    );
+  List<Widget> _buildProfileDetailsSection(double screenWidth) {
+    return [
+      _buildEditableRow(Icons.email, "Email", "email@example.com", screenWidth),
+      _buildEditableRow(Icons.phone, "Mobile", "+255 765 094 XXX", screenWidth),
+      _buildEditableRow(Icons.person, "Gender", "Male/Female", screenWidth),
+      _buildEditableRow(Icons.cake, "Date of Birth", "14th Oct, 2XXX", screenWidth),
+    ];
   }
 
   // Section: Account Details
-  Widget _buildAccountDetailsSection() {
-    return Column(
-      children: [
-        _buildEditableRow("Username", "YourUsername"),
-        _buildEditableRow("Joined", "January 2023"),
-        _buildEditableRow("Status", "Active"),
-      ],
-    );
+  List<Widget> _buildAccountDetailsSection(double screenWidth) {
+    return [
+      _buildEditableRow(Icons.account_circle, "Username", "YourUsername", screenWidth),
+      _buildEditableRow(Icons.calendar_today, "Joined", "January 2023", screenWidth),
+      _buildEditableRow(Icons.verified_user, "Status", "Active", screenWidth),
+    ];
   }
 
   // Section: MLM Metrics
-  Widget _buildMetricsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildMetricsRow("Referrals", "25"),
-        _buildMetricsRow("Total Earnings", "\$1,250"),
-        _buildMetricsRow("Team Size", "50"),
-        SizedBox(height: 10),
-        Text(
-          'Referral Link:',
-          style: AppTextStyles.subheading1.copyWith(color: AppColors.text),
-        ),
-        SizedBox(height: 4),
-        GestureDetector(
-          onTap: () {
-            // Logic to copy referral link
-            print('Referral link copied!');
-          },
-          child: Text(
-            'https://mlm-platform.com/referral/yourusername',
-            style: AppTextStyles.link.copyWith(color: AppColors.secondary),
-          ),
-        ),
-        SizedBox(height: 4),
-        GestureDetector(
-          onTap: () {
-            // Logic to show QR code
-          },
-          child: Text(
-            'Show QR Code',
-            style: AppTextStyles.link.copyWith(color: AppColors.secondary),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Button: Edit Profile
-  Widget _buildEditProfileButton(double screenHeight) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.secondary,
-          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        onPressed: () {
-          // Navigate to edit profile page
+  List<Widget> _buildMetricsSection(double screenWidth) {
+    return [
+      _buildMetricsRow("Referrals", "25", screenWidth),
+      _buildMetricsRow("Total Earnings", "\$1,250", screenWidth),
+      _buildMetricsRow("Team Size", "50", screenWidth),
+      SizedBox(height: 10),
+      Text(
+        'Referral Link:',
+        style: AppTextStyles.subheading1.copyWith(color: AppColors.text),
+      ),
+      GestureDetector(
+        onTap: () {
+          print('Referral link copied!');
         },
         child: Text(
-          'Edit Profile',
-          style: AppTextStyles.buttonText.copyWith(
-            color: Colors.white,
-            fontSize: 16,
-          ),
+          'https://mlm-platform.com/referral/yourusername',
+          style: AppTextStyles.link.copyWith(color: AppColors.secondary),
         ),
       ),
-    );
+      QRCodeGenerator(
+          referralLink: 'https://example.com/referral',
+          companyName: 'Example Corp',
+          companyIconPath: 'assets/images/company_logo.png', // Replace with actual image path
+        ),
+    ];
   }
 
   // Helper Widgets
-  Widget _buildEditableRow(String label, String value) {
+  Widget _buildEditableRow(IconData icon, String label, String value, double screenWidth) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Icon(icon, color: AppColors.primary, size: screenWidth * 0.06),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: AppTextStyles.subheading2.copyWith(color: AppColors.text),
+                  style: AppTextStyles.subheading2.copyWith(
+                    color: AppColors.text,
+                    fontSize: screenWidth * 0.04,
+                  ),
                 ),
-                SizedBox(height: 4),
                 Text(
                   value,
                   style: AppTextStyles.bodyText2.copyWith(color: Colors.grey[600]),
@@ -181,27 +171,22 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricsRow(String label, String value) {
+  Widget _buildMetricsRow(String label, String value, double screenWidth) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: AppTextStyles.subheading2.copyWith(color: AppColors.text),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  value,
-                  style: AppTextStyles.bodyText2.copyWith(color: AppColors.secondary),
-                ),
-              ],
+          Text(
+            label,
+            style: AppTextStyles.subheading2.copyWith(
+              color: AppColors.text,
+              fontSize: screenWidth * 0.04,
             ),
+          ),
+          Spacer(),
+          Text(
+            value,
+            style: AppTextStyles.bodyText2.copyWith(color: AppColors.secondary),
           ),
         ],
       ),

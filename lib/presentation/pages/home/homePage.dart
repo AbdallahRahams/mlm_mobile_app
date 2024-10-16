@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider(
       create: (context) => HomeBloc()..add(LoadHomePageDataEvent()),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF2F6FC),
+        backgroundColor: const Color.fromARGB(255, 249, 251, 255),
         drawer: DrawerWidget(),
         body: SafeArea(
           child: Column(

@@ -2,11 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../app_colors.dart';
 import '../../../text_styles.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
+import 'custom_wigets/phone_field.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -19,21 +21,11 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+
   bool _isPasswordVisible = false;
   bool _isLoading = false;
 
-  final List<String> countryCodes = ['+1', '+7', '+20', '+27', '+30', '+31', '+32', 
-  '+33', '+34', '+36', '+39', '+40', '+41', '+43', '+44', '+45', '+46', '+47', '+48', 
-  '+49', '+51', '+52', '+53', '+54', '+55', '+56', '+57', '+58', '+60', '+61', '+62', 
-  '+63', '+64', '+65', '+66', '+81', '+82', '+84', '+86', '+90', '+91', '+92', '+93', 
-  '+94', '+95', '+98', '+211', '+212', '+213', '+216', '+218', '+220', '+221', '+222', 
-  '+223', '+224', '+225', '+226', '+227', '+228', '+229', '+230', '+231', '+232', '+233', 
-  '+234', '+235', '+236', '+237', '+238', '+239', '+240', '+241', '+242', '+243', '+244', 
-  '+245', '+246', '+248', '+249', '+250', '+251', '+252', '+253', '+254', '+255', '+256', 
-  '+257', '+258', '+260', '+261', '+262', '+263', '+264', '+265', '+266', '+267', '+268', 
-  '+269', '+290', '+291', '+297', '+298', '+299'];
-
-  String selectedCountryCode = '+255';
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,304 +33,397 @@ class _SignUpPageState extends State<SignUpPage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.05,
-          vertical: screenHeight * 0.03,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: screenHeight * 0.02),
-            Center(
-              child: Image.asset(
-                "assets/images/logo.png",
-                height: screenHeight * 0.2,
-                width: screenWidth * 0.4,
-              ),
-            ),
-            Center(
-              child: Text(
-                'Join Us Today!',
-                style: AppTextStyles.heading1.copyWith(
-                  color: AppColors.primary1,
-                  fontSize: screenHeight * 0.035,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Lora',
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            Center(
-              child: Text(
-                'Create your account to get started',
-                style: AppTextStyles.bodyText1.copyWith(
-                  color: Colors.grey[600],
-                  fontSize: screenHeight * 0.02,
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.025),
-            _buildTextField(
-              controller: _usernameController,
-              labelText: 'Username',
-              icon: Icons.person,
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            _buildTextField(
-              controller: _emailController,
-              labelText: 'Email',
-              icon: Icons.email,
-              keyboardType: TextInputType.emailAddress,
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            _buildPhoneField(),
-            SizedBox(height: screenHeight * 0.015),
-            _buildPasswordTextField(),
-            SizedBox(height: screenHeight * 0.015),
-            _buildConfirmPasswordTextField(),
-            SizedBox(height: screenHeight * 0.03),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isLoading = true;
-                  Navigator.pushNamed(
-                    context,
-                    '/phone-verification',
-                    arguments: '$selectedCountryCode${_phoneNumberController.text}',
-                  );
-                });
-                _isLoading = false;
-                BlocProvider.of<AuthBloc>(context).add(
-                  AuthSignUpEvent(
-                    username: _usernameController.text,
-                    email: _emailController.text,
-                    password: _passwordController.text,
-                    phoneNumber: '$selectedCountryCode${_phoneNumberController.text}',
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: screenHeight * 0.05),
+              Center(
+                child: Text(
+                  'Welcome to Our Community!',
+                  style: AppTextStyles.heading1.copyWith(
+                    color: AppColors.primary,
+                    fontSize: screenHeight * 0.035,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Lora',
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015),
-                backgroundColor: AppColors.secondary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 5,
-              ),
-              child: Text(
-                'Sign Up',
-                style: AppTextStyles.button.copyWith(
-                  fontSize: screenHeight * 0.02,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            SizedBox(height: screenHeight * 0.02),
-            if (_isLoading)
-              const Column(
-                children: [
-                  LinearProgressIndicator(
-                    backgroundColor: AppColors.background,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary1),
-                  ),
-                ],
-              ),
-            SizedBox(height: screenHeight * 0.02),
-            BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                if (state is AuthSuccess) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  // Navigate to the next page
-                } else if (state is AuthFailure) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  // Show error message
-                }
-              },
-              child: Container(),
-            ),
-            SizedBox(height: screenHeight * 0.02),
-            Center(
-              child: RichText(
-                text: TextSpan(
-                  text: "Already have an account? ",
+              SizedBox(height: screenHeight * 0.01),
+              Center(
+                child: Text(
+                  'Sign up and start your journey with us.',
                   style: AppTextStyles.bodyText1.copyWith(
-                    color: Colors.black,
-                    fontSize: screenHeight * 0.02,
+                    fontSize: screenHeight * 0.022,
+                    color: Colors.grey[600],
                   ),
-                  children: [
-                    TextSpan(
-                      text: "Sign In",
-                      style: AppTextStyles.link.copyWith(
-                        color: AppColors.primary1,
-                        fontSize: screenHeight * 0.02,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pushNamed(context, '/sign_in');
-                        },
-                    ),
-                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              SizedBox(height: screenHeight * 0.03),
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    required IconData icon,
-    bool obscureText = false,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: AppTextStyles.bodyText1.copyWith(color: AppColors.primary1, fontSize: 14),
-        prefixIcon: Icon(icon, color: AppColors.primary1),
-        filled: true,
-        fillColor: AppColors.background,
-        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primary1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.secondary),
-        ),
-      ),
-      cursorColor: AppColors.primary1,
-      cursorWidth: 2,
-    );
-  }
+              // Username Field
+              _buildStyledTextField(
+                controller: _usernameController,
+                labelText: 'Username',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your username';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.015),
 
-  Widget _buildPhoneField() {
-    return Row(
+              // Email Field
+              _buildStyledTextField(
+                controller: _emailController,
+                labelText: 'Email',
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.015),
+
+              // Phone Field
+              PhoneFieldWidget(),
+              SizedBox(height: screenHeight * 0.015),
+
+              // Password Field
+              _buildStyledPasswordTextField(),
+              SizedBox(height: screenHeight * 0.015),
+
+              // Confirm Password Field
+              _buildStyledConfirmPasswordTextField(),
+              SizedBox(height: screenHeight * 0.025),
+
+              // Sign Up Button
+              ElevatedButton(
+                onPressed: _isLoading ? null : _handleSignUp,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015),
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: _isLoading
+                    ? CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : Text(
+                        'Sign Up',
+                        style: AppTextStyles.button.copyWith(
+                          fontSize: screenHeight * 0.022,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
+              SizedBox(height: screenHeight * 0.025),
+
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: "Have an account?",
+                    style: AppTextStyles.bodyText1.copyWith(
+                      color: Colors.black,
+                      fontSize: screenHeight * 0.018,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: " Sign In",
+                        style: AppTextStyles.link.copyWith(
+                          color: AppColors.primary,
+                          fontSize: screenHeight * 0.018,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushNamed(context, '/signin');
+                          },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Third-Party Sign Up Methods Section
+              Center(
+  child: Padding(
+    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
+    child: Row(
       children: [
         Expanded(
-          flex: 2,
-          child: DropdownButtonFormField<String>(
-            value: selectedCountryCode,
-            items: countryCodes.map((String code) {
-              return DropdownMenuItem(
-                value: code,
-                child: Text(code, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.primary1)),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                selectedCountryCode = newValue!;
-              });
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: AppColors.background,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: AppColors.primary1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: AppColors.secondary),
-              ),
-            ),
+          child: Divider(
+            color: Colors.grey[400],
+            thickness: 1,
+            endIndent: 10, // space between divider and text
           ),
         ),
-        SizedBox(width: 10),
+        Text(
+          'or sign up with',
+          style: AppTextStyles.bodyText1.copyWith(
+            fontSize: screenHeight * 0.022, // Slightly increase font size
+            color: Colors.grey[700],
+          ),
+        ),
         Expanded(
-          flex: 5,
-          child: _buildTextField(
-            controller: _phoneNumberController,
-            labelText: 'Phone Number',
-            icon: Icons.phone,
-            keyboardType: TextInputType.phone,
+          child: Divider(
+            color: Colors.grey[400],
+            thickness: 1,
+            indent: 10, // space between text and divider
           ),
         ),
       ],
+    ),
+  ),
+),
+
+              SizedBox(height: screenHeight * 0.015),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildSocialSignUpButton(
+                    icon: FontAwesomeIcons.google,
+                    label: 'Google',
+                    onPressed: () {
+                      // Add Google sign-up logic
+                    },
+                  ),
+                  _buildSocialSignUpButton(
+                    icon: FontAwesomeIcons.facebook,
+                    label: 'Facebook',
+                    onPressed: () {
+                      // Add Facebook sign-up logic
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.025),
+
+              if (_isLoading) ...[
+                LinearProgressIndicator(
+                  backgroundColor: AppColors.background,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                SpinKitThreeBounce(
+                  color: AppColors.primary,
+                  size: screenHeight * 0.05,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildPasswordTextField() {
-    return TextField(
-      controller: _passwordController,
-      obscureText: !_isPasswordVisible,
-      decoration: InputDecoration(
-        labelText: 'Password',
-        labelStyle: AppTextStyles.bodyText1.copyWith(color: AppColors.primary1, fontSize: 14),
-        prefixIcon: Icon(Icons.lock, color: AppColors.primary1),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            color: AppColors.primary1,
+  Widget _buildStyledTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required FormFieldValidator<String> validator,
+    bool obscureText = false,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 4,
+            offset: Offset(0, 2),
           ),
-          onPressed: () {
-            setState(() {
-              _isPasswordVisible = !_isPasswordVisible;
-            });
-          },
+        ],
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        validator: validator,
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(
+            color: Colors.grey.shade600,
+            fontSize: 14,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          filled: true,
+          fillColor: Colors.transparent,
         ),
-        filled: true,
-        fillColor: AppColors.background,
-        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primary1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.secondary),
+        style: TextStyle(
+          fontSize: 14,
+          color: AppColors.primary,
         ),
       ),
-      cursorColor: AppColors.primary1,
-      cursorWidth: 2,
     );
   }
 
-  Widget _buildConfirmPasswordTextField() {
-    return TextField(
-      controller: _confirmPasswordController,
-      obscureText: !_isPasswordVisible,
-      decoration: InputDecoration(
-        labelText: 'Confirm Password',
-        labelStyle: AppTextStyles.bodyText1.copyWith(color: AppColors.primary1, fontSize: 14),
-        prefixIcon: Icon(Icons.lock, color: AppColors.primary1),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            color: AppColors.primary1,
+  Widget _buildStyledPasswordTextField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 4,
+            offset: Offset(0, 2),
           ),
-          onPressed: () {
-            setState(() {
-              _isPasswordVisible = !_isPasswordVisible;
-            });
-          },
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: TextFormField(
+        controller: _passwordController,
+        obscureText: !_isPasswordVisible,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your password';
+          }
+          if (value.length < 8) {
+            return 'Password must be at least 8 characters';
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+          labelText: 'Password',
+          labelStyle: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          filled: true,
+          fillColor: Colors.transparent,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              color: AppColors.primary,
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible;
+              });
+            },
+          ),
         ),
-        filled: true,
-        fillColor: AppColors.background,
-        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primary1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.secondary),
+        style: TextStyle(
+          fontSize: 14,
+          color: AppColors.primary,
         ),
       ),
-      cursorColor: AppColors.primary1,
-      cursorWidth: 2,
     );
+  }
+
+  Widget _buildStyledConfirmPasswordTextField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: TextFormField(
+        controller: _confirmPasswordController,
+        obscureText: true,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please confirm your password';
+          }
+          if (value != _passwordController.text) {
+            return 'Passwords do not match';
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+          labelText: 'Confirm Password',
+          labelStyle: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          filled: true,
+          fillColor: Colors.transparent,
+        ),
+        style: TextStyle(
+          fontSize: 14,
+          color: AppColors.primary,
+        ),
+      ),
+    );
+  }
+
+ Widget _buildSocialSignUpButton({
+  required IconData icon,
+  required String label,
+  required VoidCallback onPressed,
+}) {
+  return Expanded(
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0), // Adjust horizontal padding as needed
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: FaIcon(
+          icon,
+          color: AppColors.primary,
+        ),
+        label: Text(
+          label,
+          style: TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          side: BorderSide(color: AppColors.primary),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 2,
+        ),
+      ),
+    ),
+  );
+}
+
+  void _handleSignUp() {
+    if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Implement sign-up logic here
+
+      // After sign-up is complete:
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

@@ -45,3 +45,26 @@ class Task {
     return false;  // Not overdue if in the future
   }
 }
+
+// Define an extension for the Task model
+extension TaskStatusExtension on Task {
+  String getTaskStatus() {
+    if (status == "Completed") {
+      return "(Completed)";
+    }
+    if (isOverdue()) {
+      return "(Overdue)";
+    }
+    return "(Pending)";
+  }
+
+  bool isOverdue() {
+    DateTime? dueDate;
+    try {
+      dueDate = DateTime.parse(this.dueDate);
+    } catch (e) {
+      return false;
+    }
+    return DateTime.now().isAfter(dueDate);
+  }
+}

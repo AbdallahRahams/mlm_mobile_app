@@ -45,9 +45,6 @@ export 'pages/wholesalers/wholesaler_management_page.dart';
 export 'pages/cart/cart_page.dart';
 export 'pages/settings/settings_page.dart';
 export 'pages/settings/change_password_page.dart';
-export 'pages/settings/contact_details_page.dart';
-export 'pages/settings/product_services_page.dart';
-
 export 'widgets/custom_button.dart';
 export 'widgets/custom_dropdown.dart';
 export 'widgets/bottom_app_bar.dart';

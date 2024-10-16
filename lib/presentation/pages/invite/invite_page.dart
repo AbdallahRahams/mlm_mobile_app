@@ -20,11 +20,13 @@ class InvitePage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: AppColors.whiteTheme,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: Text('Invite', style: AppTextStyles.appBartext),
+        backgroundColor: AppColors.whiteTheme,
+        title: Text('Invite', style: AppTextStyles.appBartext.copyWith(color: AppColors.primary)),
+        centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.secondary),
+          icon: Icon(Icons.arrow_back, color: AppColors.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -108,10 +110,9 @@ class InvitePage extends StatelessWidget {
           child: ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.secondary),
             ),
             icon: Icon(Iconsax.call, color: Colors.white),
-            label: Text('Use SMS', style: TextStyle(color: Colors.white)),
+            label: Text('Use SMS', style: AppTextStyles.button),
             onPressed: () => _showPhoneNumberPrompt(context),
           ),
         ),
@@ -120,11 +121,10 @@ class InvitePage extends StatelessWidget {
           child: ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.secondary),
             ),
             icon: Icon(Iconsax.sms, color: Colors.white),
             label:
-                Text('Use Email', style: TextStyle(color: Colors.white)),
+                Text('Use Email', style: AppTextStyles.button),
             onPressed: () => showInviteBottomSheet(context),
           ),
         ),

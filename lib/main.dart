@@ -13,9 +13,6 @@ import '../presentation/bloc/wholesaler/wholesaler_bloc.dart';
 import '../presentation/bloc/payment/payment_bloc.dart';
 import '../presentation/bloc/payment/payment_event.dart';
 import '../presentation/bloc/task/task_bloc.dart';
-import '../presentation/bloc/services/services_bloc.dart';
-import '../presentation/bloc/services/services_event.dart';
-import '../presentation/bloc/services/services_state.dart';// Import your service repository
 import 'presentation/bloc/rank/rank_bloc.dart';
 import 'routes.dart';
 

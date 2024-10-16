@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:mlm_mobile_app/app_colors.dart';
 import 'package:mlm_mobile_app/text_styles.dart';
 import '../home/homePage.dart';
@@ -7,12 +8,13 @@ class MyWalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.whiteTheme,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: Text('My Wallet', style: AppTextStyles.heading21),
+        backgroundColor: AppColors.whiteTheme,
+        title: Text('My Wallet', style: AppTextStyles.appBartext.copyWith(color: AppColors.primary)),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.secondary),
+          icon: Icon(Icons.arrow_back, color: AppColors.primary),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -22,7 +24,7 @@ class MyWalletPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView( // Makes the content scrollable
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -39,7 +41,8 @@ class MyWalletPage extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Card(
-                  elevation: 5,
+                  color: AppColors.cards,
+                  elevation: 3,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -47,7 +50,7 @@ class MyWalletPage extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
-                        Icon(Icons.monetization_on, color: AppColors.secondary, size: 40),
+                        Icon(Iconsax.money, color: AppColors.secondary, size: 40),
                         SizedBox(width: 10),
                         Flexible(
                           child: Text(
@@ -57,7 +60,7 @@ class MyWalletPage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
                             ),
-                            overflow: TextOverflow.ellipsis, // Avoid text overflow
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -84,26 +87,29 @@ class MyWalletPage extends StatelessWidget {
                     maxHeight: MediaQuery.of(context).size.height * 0.4, // Limit ListView height
                   ),
                   child: ListView(
-                    shrinkWrap: true, // Adjust size based on items
-                    physics: NeverScrollableScrollPhysics(), // Disable internal scroll of ListView
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
                       _buildTransactionTile(
-                        icon: Icons.add_circle_outline,
+                        icon: Iconsax.add_circle, // Green icon for deposit
                         title: 'Deposit',
                         subtitle: 'Added \$100.00',
                         date: '2024-09-12',
+                        iconColor: Colors.green, // Set green color for deposit icon
                       ),
                       _buildTransactionTile(
-                        icon: Icons.remove_circle_outline,
+                        icon: Iconsax.minus_cirlce, // Gray icon for withdraw
                         title: 'Withdraw',
                         subtitle: 'Removed \$50.00',
                         date: '2024-09-10',
+                        iconColor: Colors.grey, // Set gray color for withdraw icon
                       ),
                       _buildTransactionTile(
-                        icon: Icons.add_circle_outline,
+                        icon: Iconsax.add_circle,
                         title: 'Deposit',
                         subtitle: 'Added \$200.00',
                         date: '2024-09-08',
+                        iconColor: Colors.green,
                       ),
                       // Add more transactions here
                     ],
@@ -113,40 +119,35 @@ class MyWalletPage extends StatelessWidget {
                 SizedBox(height: 20),
 
                 // Add Funds and Withdraw Buttons Section
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.secondary,
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        onPressed: () {
-                          // Handle Add Funds
-                        },
-                        icon: Icon(Icons.add),
-                        label: Text('Add Funds', style: TextStyle(fontSize: 16)),
                       ),
+                      onPressed: () {
+                        // Handle Add Funds
+                      },
+                      child: Text('Add Funds', style: TextStyle(fontSize: 16, color: Colors.white)),
                     ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.secondary,
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        onPressed: () {
-                          // Handle Withdraw Funds
-                        },
-                        icon: Icon(Icons.remove),
-                        label: Text('Withdraw Funds', style: TextStyle(fontSize: 16)),
                       ),
+                      onPressed: () {
+                        // Handle Withdraw Funds
+                      },
+                      child: Text('Withdraw Funds', style: TextStyle(fontSize: 16, color: Colors.white)),
                     ),
                   ],
                 ),
@@ -164,15 +165,16 @@ class MyWalletPage extends StatelessWidget {
     required String title,
     required String subtitle,
     required String date,
+    required Color iconColor,
   }) {
     return Card(
-      elevation: 3,
+      color: AppColors.cards,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.secondary, size: 30),
+        leading: Icon(icon, color: iconColor, size: 30), // Use the provided icon color
         title: Text(
           title,
           style: TextStyle(

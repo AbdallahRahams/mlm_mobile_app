@@ -17,16 +17,24 @@ dependencies:
   flutter_bloc: ^8.1.6
   flutter_dotenv: ^5.1.0
   flutter_lints: ^4.0.0
+  flutter_local_notifications: ^17.2.3
   flutter_spinkit: ^5.2.1
+  font_awesome_flutter: ^10.7.0
   get_it: ^7.7.0
   http: ^0.13.1
   http_parser: ^4.0.2
+  iconly: ^1.0.1
   iconsax: ^0.0.8
   intl: ^0.19.0
+  intl_phone_field: ^3.2.0
+  open_file: ^3.5.6
   password_strength: ^0.2.0
   path: ^1.9.0
+  path_provider: ^2.1.4
+  pdf: ^3.11.1
   percent_indicator: ^4.2.3
   pretty_qr_code: ^3.3.0
+  printing: ^5.13.3
   qr: ^3.0.2
   qr_flutter: ^4.1.0
   share: ^2.0.4
@@ -34,9 +42,12 @@ dependencies:
   shimmer: ^3.0.0
   smooth_page_indicator: ^1.2.0+3
   sqflite: ^2.3.3+1
+  syncfusion_flutter_charts: ^27.1.50
   url_launcher: ^6.3.0
   video_player: ^2.9.1
   youtube_player_flutter: ^9.0.3
+  permission_handler: ^11.3.1
+  share_plus: ^10.0.3
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +63,19 @@ flutter:
     - assets/images/productivity_banner.png
     - assets/images/no_task.png
     - assets/.env
+    - assets/images/logo.png
+    - assets/icons/development.png
+    - assets/icons/seo.png
+    - assets/icons/business.png
+    - assets/icons/marketing.png
+    - assets/icons/graphics.png
+    - assets/icons/branding.png
+    - assets/icons/social.png
+    - assets/icons/training.png
+    - assets/icons/security.png
+    - assets/images/solution_graphic.png
+    - assets/images/community_training.png
+    - assets/images/get_started.png
   
   fonts:
     - family: Roboto

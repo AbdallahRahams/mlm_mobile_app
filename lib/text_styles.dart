@@ -106,4 +106,12 @@ class AppTextStyles {
     color: AppColors.accent,
     fontFamily: 'open-sans',
   );
+
+   // onboard
+  static const TextStyle onboard = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Color.fromARGB(255, 1, 1, 1),
+    fontFamily: 'Lora',
+  );
 }

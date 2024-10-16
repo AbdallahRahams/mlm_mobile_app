@@ -23,4 +23,8 @@ class AppColors {
 
   //New
   static const Color backgroundLight = Color(0xFFF2F6FC);
+  static const Color whiteTheme = Color(0xFFFFFFFF);
+  static const Color cards = Color(0xFFF9F9F9);
+
+  static var buttonText;
 }

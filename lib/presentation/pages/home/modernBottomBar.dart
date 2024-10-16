@@ -12,10 +12,10 @@ class _ModernBottomNavBarState extends State<ModernBottomNavBar> {
 
   static const List<String> _routes = [
     '/home',
-    '/network',
     '/earnings',
     '/tasks',
-    '/services'
+    '/services',
+    '/profile'
   ];
 
   void _onItemTapped(int index) {
@@ -40,10 +40,6 @@ class _ModernBottomNavBarState extends State<ModernBottomNavBar> {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Iconsax.profile_2user), // IconSax Network icon
-          label: 'Network',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Iconsax.wallet), // IconSax Wallet icon
           label: 'Earnings',
         ),
@@ -54,6 +50,10 @@ class _ModernBottomNavBarState extends State<ModernBottomNavBar> {
         BottomNavigationBarItem(
           icon: Icon(Iconsax.briefcase), // IconSax Briefcase icon
           label: 'Services',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Iconsax.profile_circle), // IconSax Briefcase icon
+          label: 'Profile',
         ),
       ],
     );

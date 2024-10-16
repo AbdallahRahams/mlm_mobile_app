@@ -8,16 +8,12 @@ class SupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Support',
-          style: AppTextStyles.appBartext,
-        ),
-        backgroundColor: AppColors.primary,
-        leading: IconButton(
-          icon: Icon(Iconsax.arrow_left, color: AppColors.secondary),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: Text("Support", style: AppTextStyles.appBartext.copyWith(color: AppColors.primary)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

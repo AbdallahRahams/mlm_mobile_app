@@ -22,13 +22,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.whiteTheme,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: const Text('Add New Task', style: AppTextStyles.appBartext),
+        title: Text('Add New Task', style: AppTextStyles.appBartext.copyWith(color: AppColors.primary)),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left, color: AppColors.secondary),
+          icon: const Icon(Iconsax.arrow_left, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
+        centerTitle: true,
+        backgroundColor: AppColors.whiteTheme,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

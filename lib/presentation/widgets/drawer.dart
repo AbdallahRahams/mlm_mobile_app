@@ -17,6 +17,16 @@ class DrawerWidget extends StatelessWidget {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
+                    _buildDrawerItem(
+                      icon: Iconsax.profile_2user,
+                      text: 'OnBoarding',
+                      onTap: () => Navigator.pushNamed(context, "/onboarding"),
+                    ),
+                    _buildDrawerItem(
+                      icon: Iconsax.profile_2user,
+                      text: 'Splash',
+                      onTap: () => Navigator.pushNamed(context, "/splash"),
+                    ),
                     _buildSection('Account'),
                     _buildDrawerItem(
                       icon: Iconsax.profile_2user,

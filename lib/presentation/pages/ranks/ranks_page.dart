@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mlm_mobile_app/app_colors.dart';
 import 'package:mlm_mobile_app/text_styles.dart';
 
 class RanksPage extends StatefulWidget {
@@ -21,7 +22,6 @@ class _RanksPageState extends State<RanksPage> {
         "Basic support",
       ],
       "rankColor": Colors.green,
-      "icon": Icons.star_border,
     },
     {
       "name": "Bronze",
@@ -34,7 +34,6 @@ class _RanksPageState extends State<RanksPage> {
         "Personalized dashboard",
       ],
       "rankColor": Colors.brown,
-      "icon": Icons.military_tech_outlined,
     },
     {
       "name": "Gold",
@@ -49,7 +48,6 @@ class _RanksPageState extends State<RanksPage> {
         "Verified Badge",
       ],
       "rankColor": Colors.amber,
-      "icon": Icons.military_tech,
     },
     {
       "name": "Platinum",
@@ -64,7 +62,6 @@ class _RanksPageState extends State<RanksPage> {
         "Special product discounts",
       ],
       "rankColor": Colors.grey,
-      "icon": Icons.diamond_outlined,
     },
     {
       "name": "Diamond",
@@ -79,7 +76,6 @@ class _RanksPageState extends State<RanksPage> {
         "Special bonuses",
       ],
       "rankColor": Colors.blueAccent,
-      "icon": Icons.diamond,
     },
     {
       "name": "Elite",
@@ -95,15 +91,26 @@ class _RanksPageState extends State<RanksPage> {
         "Partnership opportunities",
       ],
       "rankColor": Colors.deepPurpleAccent,
-      "icon": Icons.star_rate,
     }
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.whiteTheme,
       appBar: AppBar(
-        title: const Text('Rank Details', style: AppTextStyles.heading2),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColors.primary),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Ranks',
+          style: AppTextStyles.appBartext.copyWith(fontSize: 27, color: AppColors.primary), // Responsive title font
+        ),
+        centerTitle: true,
+        backgroundColor: AppColors.whiteTheme,
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -143,7 +150,6 @@ class RankTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(rank["icon"], color: rank["rankColor"], size: 40),
               const SizedBox(width: 10),
               Flexible(
                 child: Text(
@@ -151,6 +157,7 @@ class RankTile extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: rank["rankColor"],
                         fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

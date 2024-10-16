@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mlm_mobile_app/presentation/bloc/home/home_state.dart';
 import 'package:mlm_mobile_app/presentation/pages/invite/invite_page.dart';
+import 'package:mlm_mobile_app/presentation/pages/onboarding/splashScreen.dart';
 import 'package:mlm_mobile_app/presentation/pages/paymentInfo/payment_info_page.dart';
 import 'package:mlm_mobile_app/presentation/pages/profile/profile_page.dart';
 import 'package:mlm_mobile_app/presentation/pages/services/services.dart';
@@ -27,12 +28,12 @@ import '../presentation/pages/wholesalers/wholesaler_management_page.dart';
 import '../presentation/pages/cart/cart_page.dart';
 import '../presentation/pages/settings/settings_page.dart';
 import '../presentation/pages/settings/change_password_page.dart';
-import '../presentation/pages/settings/contact_details_page.dart';
-import '../presentation/pages/settings/product_services_page.dart';
 import '../presentation/pages/auth/phone_verification.dart';
 import 'presentation/pages/home/homePage.dart';
 import 'presentation/pages/notifications/NotificationsPage.dart';
+import 'presentation/pages/onboarding/onboarding.dart';
 import 'presentation/pages/ranks/ranks_page.dart';
+import 'presentation/pages/services/services_page.dart';
 import 'presentation/pages/top-performers/top_performers.dart';
 import 'presentation/pages/training/trainingsPage.dart';
 
@@ -83,15 +84,12 @@ class Routes {
         return MaterialPageRoute(builder: (_) => SettingsPage());
       case '/change-password':
         return MaterialPageRoute(builder: (_) => ChangePasswordPage());
-      case '/contact-details':
-        return MaterialPageRoute(builder: (_) => ContactDetailsPage());
       case '/ranks':
         return MaterialPageRoute(builder: (_) => RanksPage());
       case '/phone-verification':
         final phoneNumber = settings.arguments as String;
-        return MaterialPageRoute(builder: (_) => PhoneVerificationPage(phoneNumber: phoneNumber));
-      case '/product-services':
-        return MaterialPageRoute(builder: (_) => ProductServicesPage());
+        return MaterialPageRoute(
+            builder: (_) => PhoneVerificationPage(phoneNumber: phoneNumber));
       case '/home':
         return MaterialPageRoute(builder: (_) => HomePage());
       case '/notifications':
@@ -104,6 +102,10 @@ class Routes {
         return MaterialPageRoute(builder: (_) => PaymentInfoPage());
       case '/my-wallet':
         return MaterialPageRoute(builder: (_) => MyWalletPage());
+      case '/onboarding':
+        return MaterialPageRoute(builder: (_) => OnboardingPage());
+      case '/splash':
+        return MaterialPageRoute(builder: (_) => SplashScreen());
       case '/invite':
         return MaterialPageRoute(builder: (_) => InvitePage());
       case '/trainings':
